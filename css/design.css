@@ -94,19 +94,37 @@ body {
     height: 100px;
     width: 150px;
 
-    border: 2px solid black;
+
     padding: 10px;
+
+    position: absolute !important;
 }
 
-.ui-resizable-sw,
-.ui-resizable-se,
-.ui-resizable-nw,
-.ui-resizable-ne {
-    width: 20px;
-    height: 20px;
+.object:focus {
+    border: 1px dashed black;
+    outline: none;
 }
 
-.ui-resizable-se{
-	right: -5px;
-	bottom: -5px;
+.object > .ui-resizable-sw,
+.object > .ui-resizable-se,
+.object > .ui-resizable-nw,
+.object > .ui-resizable-ne {
+    width: 0px;
+    height: 0px;
+}
+
+.object:focus > .ui-resizable-sw,
+.object:focus > .ui-resizable-se,
+.object:focus > .ui-resizable-nw,
+.object:focus > .ui-resizable-ne {
+    width: 10px;
+    height: 10px;
+    background: url(../assets/image/resize_point.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.ui-resizable-se {
+    right: -5px;
+    bottom: -5px;
 }

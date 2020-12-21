@@ -20,7 +20,7 @@ $(document).ready(function(e) {
         .resizable({
         	handles: "ne, se, sw, nw",
          })
-        .appendTo('.view');
+        .appendTo('.view').focus();
     });
 
 
