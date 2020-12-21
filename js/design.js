@@ -19,7 +19,6 @@ $(document).ready(function(e) {
         .draggable({ revert: 'invalid' })
         .resizable({
         	handles: "ne, se, sw, nw",
-        	
          })
         .appendTo('.view');
     });
