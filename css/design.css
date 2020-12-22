@@ -128,3 +128,8 @@ body {
     right: -5px;
     bottom: -5px;
 }
+
+#select_font_family {
+    width: 80%;
+    height: 40px;
+}

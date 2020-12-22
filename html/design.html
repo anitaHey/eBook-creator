@@ -20,25 +20,47 @@
                     / 共 <span class="page_all_num">10</span> 頁
                 </div>
                 <div class="inline_line mt-3 layout_center">
-                	<button class="page_setting_btn"><img src="../assets/image/prev_page.png" alt=""></button>
-                	<button class="page_setting_btn"><img src="../assets/image/play_page.png" alt=""></button>
-                	<button class="page_setting_btn"><img src="../assets/image/next_page.png" alt=""></button>
+                    <button class="page_setting_btn"><img src="../assets/image/prev_page.png" alt=""></button>
+                    <button class="page_setting_btn"><img src="../assets/image/play_page.png" alt=""></button>
+                    <button class="page_setting_btn"><img src="../assets/image/next_page.png" alt=""></button>
                 </div>
             </div>
             <div class="row mt-3">
-            	<div class="col-6">
-            	</div>
-            	<div class="col-6">
-            		<button class="page_insert_btn" id="insert_text"><img src="../assets/image/text.png" alt=""></button>
-            	</div>
+                <div class="col-6">
+                </div>
+                <div class="col-6">
+                    <button class="page_insert_btn" id="insert_text"><img src="../assets/image/text.png" alt=""></button>
+                </div>
             </div>
         </div>
         <div class="view"></div>
-        <div class="obj_setting"></div>
+        <div class="obj_setting">
+            <div id="setting_page" class="layout_center setting_part">
+                setting page
+            </div>
+            <div id="setting_text" class="layout_center setting_part">
+                <select id="select_font_family">
+                    <option value="Arial">Arial</option>
+                    <option value="Sans Serif" selected>Sans Serif</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Arial Black">Arial Black</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Bookman">Bookman</option>
+                    <option value="Garamond">Garamond</option>
+                    <option value="Palatino">Palatino</option>
+                    <option value="Georgia">Georgia</option>
+                </select>
+            </div>
+        </div>
     </div>
 </body>
 <script src="../tool/jquery-3.3.1.min.js"></script>
 <script src="../tool/jquery-ui/jquery-ui.min.js"></script>
 <script src="../tool/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
 <script src="../js/design.js"></script>
+
 </html>
