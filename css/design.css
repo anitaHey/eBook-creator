@@ -100,8 +100,12 @@ body {
     position: absolute !important;
 }
 
-.object:focus {
+.object_focus {
     border: 1px dashed black;
+    outline: none;
+}
+
+.object * {
     outline: none;
 }
 
@@ -113,10 +117,10 @@ body {
     height: 0px;
 }
 
-.object:focus > .ui-resizable-sw,
-.object:focus > .ui-resizable-se,
-.object:focus > .ui-resizable-nw,
-.object:focus > .ui-resizable-ne {
+.object_focus > .ui-resizable-sw,
+.object_focus > .ui-resizable-se,
+.object_focus > .ui-resizable-nw,
+.object_focus > .ui-resizable-ne {
     width: 10px;
     height: 10px;
     background: url(../assets/image/resize_point.png);

@@ -8,8 +8,7 @@ $(document).ready(function(e) {
     $('#insert_text').click(function() {
         jQuery('<div/>', {
                 "class": 'object text',
-                'contenteditable': 'true',
-                'html': '&nbsp;'
+                'tabindex': 1,
             })
             .on({
                 mousemove: function(event) {
@@ -21,22 +20,6 @@ $(document).ready(function(e) {
                         $(this).draggable("disable");
                     }
                 },
-                input: function(event) {
-                    if(event.target.innerText.length == 0)
-                        $(this).html('&nbsp;');
-
-                    var text = getPlainText(event.target.innerHTML);
-                    var old_text = $(this).text();
-                    console.log();
-                    $(this).text(old_text.slice(0, -(text.length)));
-
-                    for(var i of text){
-                        console.log(i);
-                        jQuery('<span/>', {
-                            'text': i,
-                        }).appendTo($(this));
-                    }
-                }
             })
             .draggable({ revert: 'invalid' })
             .resizable({
@@ -45,13 +28,71 @@ $(document).ready(function(e) {
             .click(function() {
                 event.stopPropagation();
             })
-            .appendTo('.view').focus(function() {
-                $('.setting_part').each(function() {
-                    $(this).hide();
-                });
+            .appendTo('.view')
+            .focus(function() {
+                obj_click(true, 'setting_text', $(this));
+            })
+            .focusout(function() {
+                obj_click(false, 'setting_text', $(this));
+            })
+            .append(
+                jQuery('<div/>', {
+                    'class': 'w-100 h-100',
+                    'contenteditable': 'true',
+                })
+                .on({
+                    input: function(event) {
+                        var text = $.parseHTML(event.target.innerHTML);
 
-                $('#setting_text').show();
-            }).focus();
+                        $(this).empty();
+
+                        for (var i of text) {
+                            if (i.nodeName.includes("text")) {
+                                for (var n of i.nodeValue) {
+                                    var p = "<span>" + n + "</span>";
+                                    $(this).append(p);
+                                }
+                            } else if (i.nodeName == "SPAN") {
+                                if (i.innerText.length > 1) {
+                                    for (var n of i.innerText) {
+                                        var p = "<span>" + n + "</span>";
+                                        $(this).append(p);
+                                    }
+                                } else $(this).append(i);
+                            } else if (i.nodeName == "DIV") {
+                                var new_div = jQuery('<div/>');
+                                var div_text = $.parseHTML(i.innerHTML);
+                                for (var inn of div_text) {
+                                    if (inn.nodeName.includes("text")) {
+                                        for (var n of inn.nodeValue) {
+                                            var p = "<span>" + n + "</span>";
+                                            $(new_div).append(p);
+                                        }
+                                    } else if (inn.nodeName == "SPAN") {
+                                        if (inn.innerText.length > 1) {
+                                            for (var n of inn.innerText) {
+                                                var p = "<span>" + n + "</span>";
+                                                $(new_div).append(p);
+                                            }
+                                        } else $(new_div).append(inn);
+                                    }
+                                }
+
+                                $(this).append(new_div);
+                            }
+                        }
+                        // SetCaretPosition($(this), -1);
+                    }
+                })
+                .click(function() {
+                    obj_click(true, 'setting_text', $(this).parent());
+                })
+                .focusout(function() {
+                    obj_click(false, 'setting_text', $(this).parent());
+                })
+            )
+            .focus();
+
     });
 
     $('.view').click(function() {
@@ -66,6 +107,18 @@ $(document).ready(function(e) {
         tolerance: 'fit',
     });
 });
+
+function obj_click(focus, id, obj) {
+    $('.setting_part').each(function() {
+        $(this).hide();
+    });
+
+    if (focus) {
+        $('#' + id).show();
+        $(obj).addClass("object_focus");
+    } else $(obj).removeClass("object_focus");
+
+}
 
 function isBorder(obj, event, range) {
     var rect = obj.getBoundingClientRect();
@@ -97,8 +150,29 @@ function changeFont(font) {
     }
 }
 
-function getPlainText(text) {
-    var el = $("<div/>");
-    el.html(text).children().remove();
-    return el.text();
+function SetCaretPosition(el, pos) {
+
+    // Loop through all child nodes
+    for (var node of el.childNodes) {
+        if (node.nodeType == 3) { // we have a text node
+            if (node.length >= pos) {
+                // finally add our range
+                var range = document.createRange(),
+                    sel = window.getSelection();
+                range.setStart(node, pos);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                return -1; // we are done
+            } else {
+                pos -= node.length;
+            }
+        } else {
+            pos = SetCaretPosition(node, pos);
+            if (pos == -1) {
+                return -1; // no need to finish the for loop
+            }
+        }
+    }
+    return pos; // needed because of recursion stuff
 }
