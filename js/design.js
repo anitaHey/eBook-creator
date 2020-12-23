@@ -41,7 +41,7 @@ $(document).ready(function(e) {
                     'contenteditable': 'true',
                 })
                 .on({
-                    input: function(event) {
+                    compositionend: function(event) {
                         var text = $.parseHTML(event.target.innerHTML);
 
                         $(this).empty();
@@ -81,7 +81,7 @@ $(document).ready(function(e) {
                                 $(this).append(new_div);
                             }
                         }
-                        // SetCaretPosition($(this), -1);
+                        setEndOfContenteditable($(this).get(0));
                     }
                 })
                 .click(function() {
@@ -106,14 +106,18 @@ $(document).ready(function(e) {
     $(".view").droppable({
         tolerance: 'fit',
     });
+
+    $("#select_font_family > option").hover(function(e) {
+        console.log($(this).text());
+    });
 });
 
 function obj_click(focus, id, obj) {
-    $('.setting_part').each(function() {
-        $(this).hide();
-    });
-
     if (focus) {
+        $('.setting_part').each(function() {
+            $(this).hide();
+        });
+
         $('#' + id).show();
         $(obj).addClass("object_focus");
     } else $(obj).removeClass("object_focus");
@@ -136,43 +140,33 @@ function isBorder(obj, event, range) {
 function changeFont(font) {
     var sel = window.getSelection();
     if (sel.rangeCount) {
+        console.log(sel);
+        // jQuery('<span/>', {
+        //     html: sel.toString(),
+        //     css: {
+        //         "font-family": font.value
+        //     }
+        // })
 
-        jQuery('<span/>', {
-            html: sel.toString(),
-            css: {
-                "font-family": font.value
-            }
-        })
-
-        var range = sel.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(e);
+        // var range = sel.getRangeAt(0);
+        // range.deleteContents();
+        // range.insertNode(e);
     }
 }
 
-function SetCaretPosition(el, pos) {
-
-    // Loop through all child nodes
-    for (var node of el.childNodes) {
-        if (node.nodeType == 3) { // we have a text node
-            if (node.length >= pos) {
-                // finally add our range
-                var range = document.createRange(),
-                    sel = window.getSelection();
-                range.setStart(node, pos);
-                range.collapse(true);
-                sel.removeAllRanges();
-                sel.addRange(range);
-                return -1; // we are done
-            } else {
-                pos -= node.length;
-            }
-        } else {
-            pos = SetCaretPosition(node, pos);
-            if (pos == -1) {
-                return -1; // no need to finish the for loop
-            }
-        }
+function setEndOfContenteditable(contentEditableElement) {
+    var range, selection;
+    if (document.createRange) {
+        range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+        range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection(); //get the selection object (allows you to change selection)
+        selection.removeAllRanges(); //remove any selections already made
+        selection.addRange(range); //make the range you have just created the visible selection
+    } else if (document.selection) {
+        range = document.body.createTextRange(); //Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(contentEditableElement); //Select the entire contents of the element with the range
+        range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        range.select(); //Select the range (make it the visible selection
     }
-    return pos; // needed because of recursion stuff
 }
