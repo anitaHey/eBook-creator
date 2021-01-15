@@ -107,9 +107,15 @@ $(document).ready(function(e) {
         tolerance: 'fit',
     });
 
-    $("#select_font_family > option").hover(function(e) {
-        console.log($(this).text());
+
+    $("select").on('mouseenter', 'option', function(e) {
+        var $target = $(e.target);
+        console.log($target.text());
     });
+
+    // $("#select_font_family > option").hover(function(e) {
+    //     console.log($(this).text());
+    // });
 });
 
 function obj_click(focus, id, obj) {
@@ -136,6 +142,8 @@ function isBorder(obj, event, range) {
     else
         return false;
 }
+
+
 
 function changeFont(font) {
     var sel = window.getSelection();
