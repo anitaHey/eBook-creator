@@ -3,6 +3,24 @@ body {
     font-size: 20px;
 }
 
+*::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #a39e9e;
+}
+
 .layout_center {
     display: flex;
     justify-content: center;
@@ -109,18 +127,18 @@ body {
     outline: none;
 }
 
-.object > .ui-resizable-sw,
-.object > .ui-resizable-se,
-.object > .ui-resizable-nw,
-.object > .ui-resizable-ne {
+.object>.ui-resizable-sw,
+.object>.ui-resizable-se,
+.object>.ui-resizable-nw,
+.object>.ui-resizable-ne {
     width: 0px;
     height: 0px;
 }
 
-.object_focus > .ui-resizable-sw,
-.object_focus > .ui-resizable-se,
-.object_focus > .ui-resizable-nw,
-.object_focus > .ui-resizable-ne {
+.object_focus>.ui-resizable-sw,
+.object_focus>.ui-resizable-se,
+.object_focus>.ui-resizable-nw,
+.object_focus>.ui-resizable-ne {
     width: 10px;
     height: 10px;
     background: url(../assets/image/resize_point.png);
@@ -133,7 +151,32 @@ body {
     bottom: -5px;
 }
 
-#select_font_family {
+.select_div {
+    position: relative;
     width: 80%;
+}
+
+.select_div > div {
     height: 40px;
+    border: 1px #000 solid;
+    padding-left: 5px;
+}
+
+.select_ul {
+    position: absolute;
+    top: 40px;
+    left:0;
+
+    height:200px;
+    width: 100%;
+    overflow: auto;
+    border: 1px #000 solid;
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.select_ul li:hover {
+    background-color: #dadada;
 }

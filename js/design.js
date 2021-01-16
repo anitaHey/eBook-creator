@@ -107,9 +107,18 @@ $(document).ready(function(e) {
         tolerance: 'fit',
     });
 
-    // $("#select_font_family > option").hover(function(e) {
-    //     console.log($(this).text());
-    // });
+    $(".select_ul").hide();
+    $(".select_div > div").click(function(e) {
+        $(this).next().toggle();
+    });
+
+    $(".select_ul > li").click(function(e) {
+        $(this).parent().prev().html($(this).text());
+    });
+
+    $(".select_ul > li").hover(function(e) {
+       console.log($(this).text());
+    });
 });
 
 function obj_click(focus, id, obj) {
