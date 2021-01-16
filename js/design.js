@@ -107,12 +107,6 @@ $(document).ready(function(e) {
         tolerance: 'fit',
     });
 
-
-    $("select").on('mouseenter', 'option', function(e) {
-        var $target = $(e.target);
-        console.log($target.text());
-    });
-
     // $("#select_font_family > option").hover(function(e) {
     //     console.log($(this).text());
     // });
