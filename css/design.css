@@ -180,3 +180,13 @@ body {
 .select_ul li:hover {
     background-color: #dadada;
 }
+
+.view *::selection {
+  background: #525252;
+  color:white;
+}
+
+.view *::-moz-selection { /* Code for Firefox */
+  background: #525252;
+  color:white;
+}

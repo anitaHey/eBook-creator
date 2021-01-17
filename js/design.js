@@ -1,4 +1,9 @@
 var input_state = 1;
+var select_node = new Array();
+var save_select_node = new Array();
+var new_select = true;
+var select_range;
+
 
 $(document).ready(function(e) {
     $('.setting_part').each(function() {
@@ -43,6 +48,21 @@ $(document).ready(function(e) {
                     'contenteditable': 'true',
                 })
                 .on({
+                    selectstart: function(event) {
+                        $(document).one('mouseup', function() {
+                            new_select = false;
+                            var sel = this.getSelection();
+
+                            if (sel.toString().length > 0) {
+                                select_range = sel.getRangeAt(0);
+                                new_select = true;
+                                select_node = select_range.cloneContents().childNodes;
+                                console.log(select_node);
+                            } else {
+                                select_node = [];
+                            }
+                        });
+                    },
                     compositionstart: function(event) {
                         input_state = 0;
                     },
@@ -118,16 +138,24 @@ $(document).ready(function(e) {
     });
 
     $(".select_ul").hide();
+
+    $(".select_div > div").mousedown(function(e) {
+        event.preventDefault();
+    });
+
     $(".select_div > div").click(function(e) {
         $(this).next().toggle();
     });
 
     $(".select_ul > li").click(function(e) {
         $(this).parent().prev().html($(this).text());
+        changeFont($(this).text(), true);
+        new_select = false;
     });
 
     $(".select_ul > li").hover(function(e) {
-        console.log($(this).text());
+        console.log(select_node);
+        changeFont($(this).text(), false);
     });
 });
 
@@ -158,19 +186,26 @@ function isBorder(obj, event, range) {
 
 
 
-function changeFont(font) {
-    var sel = window.getSelection();
-    if (sel.rangeCount) {
-        jQuery('<span/>', {
-            html: sel.toString(),
-            css: {
-                "font-family": font.value
+function changeFont(font, change) {
+    if (select_node.length > 0) {
+        var length = select_node.length;
+        if (change) save_select_node.clear();
+        var node = document.createElement('span');
+       
+        for (var i = 0; i < length ; i++) {
+            if(!change && new_select && save_select_node.length < length) {
+                save_select_node.push($(select_node[i]).css("font-family"));
             }
-        })
-
-        var range = sel.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(e);
+            
+            select_node[i].style.fontFamily = font;
+            node.appendChild(select_node[i]);
+        }
+console.log(node);
+        select_range.deleteContents();
+        select_range.insertNode(node);
+        // for (var i = length - 1; i >= 0; i--) {
+        //     select_range.insertNode(select_node[i]);
+        // }
     }
 }
 
