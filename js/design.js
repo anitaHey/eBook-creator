@@ -154,7 +154,6 @@ $(document).ready(function(e) {
     });
 
     $(".select_ul > li").hover(function(e) {
-        console.log(select_node);
         changeFont($(this).text(), false);
     });
 });
@@ -191,21 +190,24 @@ function changeFont(font, change) {
         var length = select_node.length;
         if (change) save_select_node.clear();
         var node = document.createElement('span');
-       
-        for (var i = 0; i < length ; i++) {
-            if(!change && new_select && save_select_node.length < length) {
+
+        console.log(select_node);
+        for (var i = 0; i < length; i++) {
+            if (!change && new_select && save_select_node.length < length) {
                 save_select_node.push($(select_node[i]).css("font-family"));
             }
-            
+
             select_node[i].style.fontFamily = font;
-            node.appendChild(select_node[i]);
+            node.appendChild($(select_node[i]).clone()[0]);
         }
-console.log(node);
+
+        // console.log(save_select_node);
+        // console.log(node);
         select_range.deleteContents();
-        select_range.insertNode(node);
-        // for (var i = length - 1; i >= 0; i--) {
-        //     select_range.insertNode(select_node[i]);
-        // }
+        // select_range.insertNode(node);
+        for (var i = length - 1; i >= 0; i--) {
+            select_range.insertNode(select_node[i]);
+        }
     }
 }
 
