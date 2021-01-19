@@ -51,13 +51,13 @@ $(document).ready(function(e) {
                     selectstart: function(event) {
                         $(document).one('mouseup', function() {
                             new_select = false;
+                            $('.new_span').children().unwrap();
                             var sel = this.getSelection();
 
                             if (sel.toString().length > 0) {
                                 select_range = sel.getRangeAt(0);
                                 new_select = true;
                                 select_node = select_range.cloneContents().childNodes;
-                                console.log(select_node);
                             } else {
                                 select_node = [];
                             }
@@ -183,15 +183,13 @@ function isBorder(obj, event, range) {
         return false;
 }
 
-
-
 function changeFont(font, change) {
     if (select_node.length > 0) {
         var length = select_node.length;
-        if (change) save_select_node.clear();
+        if (change) save_select_node = [];
         var node = document.createElement('span');
+        $(node).addClass("new_span");
 
-        console.log(select_node);
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
                 save_select_node.push($(select_node[i]).css("font-family"));
@@ -201,13 +199,10 @@ function changeFont(font, change) {
             node.appendChild($(select_node[i]).clone()[0]);
         }
 
-        // console.log(save_select_node);
-        // console.log(node);
         select_range.deleteContents();
-        // select_range.insertNode(node);
-        for (var i = length - 1; i >= 0; i--) {
-            select_range.insertNode(select_node[i]);
-        }
+        select_range.insertNode(node);
+
+        if(change) $('#setting_text > .select_div > div').next().toggle();
     }
 }
 
