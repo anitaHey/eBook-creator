@@ -49,10 +49,10 @@ $(document).ready(function(e) {
                 })
                 .on({
                     selectstart: function(event) {
-                        $(document).one('mouseup', function() {
+                        $(this).one('mouseup', function() {
                             new_select = false;
                             $('.new_span').children().unwrap();
-                            var sel = this.getSelection();
+                            var sel = window.getSelection();
 
                             if (sel.toString().length > 0) {
                                 select_range = sel.getRangeAt(0);
@@ -60,6 +60,10 @@ $(document).ready(function(e) {
                                 select_node = select_range.cloneContents().childNodes;
                             } else {
                                 select_node = [];
+                                // setCurrentSelect();
+                                console.log($(this)[0].childNodes[getCaretPosition($(this))]);
+                                
+                                
                             }
                         });
                     },
@@ -70,20 +74,30 @@ $(document).ready(function(e) {
                         input_state = 1;
                     },
                     keyup: function(event) {
-                        if (input_state == 1) {
+                        if (input_state == 1 && event.keyCode!= 37 && event.keyCode!= 38 && event.keyCode!= 39 && event.keyCode!= 40) {
                             var text = $.parseHTML(event.target.innerHTML);
                             $(this).empty();
 
                             for (var i of text) {
                                 if (i.nodeName.includes("text")) {
                                     for (var n of i.nodeValue) {
-                                        var p = "<span>" + n + "</span>";
+                                        var p = jQuery('<span/>', {
+                                            text: n,
+                                            css: {
+                                                "font-family": getCurrentSelect("font-family")
+                                            }
+                                        });
                                         $(this).append(p);
                                     }
                                 } else if (i.nodeName == "SPAN") {
                                     if (i.innerText.length > 1) {
                                         for (var n of i.innerText) {
-                                            var p = "<span>" + n + "</span>";
+                                            var p = jQuery('<span/>', {
+                                                text: n,
+                                                css: {
+                                                    "font-family": getCurrentSelect("font-family")
+                                                }
+                                            });
                                             $(this).append(p);
                                         }
                                     } else $(this).append(i);
@@ -93,13 +107,23 @@ $(document).ready(function(e) {
                                     for (var inn of div_text) {
                                         if (inn.nodeName.includes("text")) {
                                             for (var n of inn.nodeValue) {
-                                                var p = "<span>" + n + "</span>";
+                                                var p = jQuery('<span/>', {
+                                                    text: n,
+                                                    css: {
+                                                        "font-family": getCurrentSelect("font-family")
+                                                    }
+                                                });
                                                 $(new_div).append(p);
                                             }
                                         } else if (inn.nodeName == "SPAN") {
                                             if (inn.innerText.length > 1) {
                                                 for (var n of inn.innerText) {
-                                                    var p = "<span>" + n + "</span>";
+                                                    var p = jQuery('<span/>', {
+                                                        text: n,
+                                                        css: {
+                                                            "font-family": getCurrentSelect("font-family")
+                                                        }
+                                                    });
                                                     $(new_div).append(p);
                                                 }
                                             } else $(new_div).append(inn);
@@ -111,8 +135,9 @@ $(document).ready(function(e) {
                             }
                             setEndOfContenteditable($(this).get(0));
                         }
-
-                    }
+                        // $(this)[0].childNodes[getCaretPosition($(this))]
+                        console.log(getCaretPosition($(this)));
+                    },
                 })
                 .click(function() {
                     obj_click(true, 'setting_text', $(this).parent());
@@ -195,14 +220,14 @@ function changeFont(font, change) {
                 save_select_node.push($(select_node[i]).css("font-family"));
             }
 
-            select_node[i].style.fontFamily = font;
+            $(select_node[i]).css("font-family", font);
             node.appendChild($(select_node[i]).clone()[0]);
         }
 
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if(change) $('#setting_text > .select_div > div').next().toggle();
+        if (change) $('#setting_text > .select_div > div').next().hide();
     }
 }
 
@@ -221,4 +246,42 @@ function setEndOfContenteditable(contentEditableElement) {
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         range.select(); //Select the range (make it the visible selection
     }
+}
+
+function getCaretPosition(editableDiv) {
+    var caretPos = 0,
+        sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            caretPos = range.endOffset;
+            
+            // if (range.commonAncestorContainer.parentNode == editableDiv) {
+            //  caretPos = range.endOffset;
+            // }
+        }
+    } else if (document.selection && document.selection.createRange) {
+        range = document.selection.createRange();
+        if (range.parentElement() == editableDiv) {
+            var tempEl = document.createElement("span");
+            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+            var tempRange = range.duplicate();
+            tempRange.moveToElementText(tempEl);
+            tempRange.setEndPoint("EndToEnd", range);
+            caretPos = tempRange.text.length;
+        }
+    }
+    return caretPos;
+}
+
+function getCurrentSelect(property) {
+    if (property == "font-family")
+        return $('#setting_text > .select_div > div').text();
+
+    return "";
+}
+
+function setCurrentSelect(element, property) {
+
 }
