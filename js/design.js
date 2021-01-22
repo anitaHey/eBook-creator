@@ -61,9 +61,10 @@ $(document).ready(function(e) {
                             } else {
                                 select_node = [];
                                 // setCurrentSelect();
-                                console.log($(this)[0].childNodes[getCaretPosition($(this))]);
-                                
-                                
+                                console.log(getSelectionOffsetRelativeTo($(this).get(0), ""));
+                                // console.log($(this)[0].childNodes[getCaretPosition($(this))]);
+
+
                             }
                         });
                     },
@@ -74,7 +75,7 @@ $(document).ready(function(e) {
                         input_state = 1;
                     },
                     keyup: function(event) {
-                        if (input_state == 1 && event.keyCode!= 37 && event.keyCode!= 38 && event.keyCode!= 39 && event.keyCode!= 40) {
+                        if (input_state == 1 && event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40 && event.keyCode != 229) {
                             var text = $.parseHTML(event.target.innerHTML);
                             $(this).empty();
 
@@ -136,7 +137,8 @@ $(document).ready(function(e) {
                             setEndOfContenteditable($(this).get(0));
                         }
                         // $(this)[0].childNodes[getCaretPosition($(this))]
-                        console.log(getCaretPosition($(this)));
+                        console.log(getSelectionOffsetRelativeTo($(this).get(0), ""));
+                        // console.log();
                     },
                 })
                 .click(function() {
@@ -233,46 +235,45 @@ function changeFont(font, change) {
 
 function setEndOfContenteditable(contentEditableElement) {
     var range, selection;
+    var length = $(contentEditableElement)[0].childNodes.length;
     if (document.createRange) {
         range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+        range.selectNodeContents($(contentEditableElement)[0].childNodes[length - 1]); //Select the entire contents of the element with the range
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         selection = window.getSelection(); //get the selection object (allows you to change selection)
         selection.removeAllRanges(); //remove any selections already made
         selection.addRange(range); //make the range you have just created the visible selection
     } else if (document.selection) {
         range = document.body.createTextRange(); //Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(contentEditableElement); //Select the entire contents of the element with the range
+        range.moveToElementText($(contentEditableElement)[0].childNodes[length - 1]); //Select the entire contents of the element with the range
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         range.select(); //Select the range (make it the visible selection
     }
 }
 
-function getCaretPosition(editableDiv) {
-    var caretPos = 0,
-        sel, range;
-    if (window.getSelection) {
-        sel = window.getSelection();
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            caretPos = range.endOffset;
-            
-            // if (range.commonAncestorContainer.parentNode == editableDiv) {
-            //  caretPos = range.endOffset;
-            // }
-        }
-    } else if (document.selection && document.selection.createRange) {
-        range = document.selection.createRange();
-        if (range.parentElement() == editableDiv) {
-            var tempEl = document.createElement("span");
-            editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-            var tempRange = range.duplicate();
-            tempRange.moveToElementText(tempEl);
-            tempRange.setEndPoint("EndToEnd", range);
-            caretPos = tempRange.text.length;
-        }
+function getSelectionOffsetRelativeTo(parentElement, currentNode) {
+    var currentSelection, currentRange,
+        offset = 0,
+        prevSibling,
+        nodeContent;
+
+    if (!currentNode) {
+        currentSelection = window.getSelection();
+        currentRange = currentSelection.getRangeAt(0);
+        currentNode = currentRange.startContainer;
+        offset += currentRange.startOffset;
     }
-    return caretPos;
+
+    if (currentNode === parentElement) return offset;
+    if (!parentElement.contains(currentNode)) return -1;
+
+    while (prevSibling = (prevSibling || currentNode).previousSibling) {
+        nodeContent = prevSibling.innerText || prevSibling.nodeValue || "";
+        offset += nodeContent.length;
+    }
+
+    return offset + getSelectionOffsetRelativeTo(parentElement, currentNode.parentNode);
+
 }
 
 function getCurrentSelect(property) {
