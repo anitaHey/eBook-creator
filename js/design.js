@@ -60,11 +60,7 @@ $(document).ready(function(e) {
                                 select_node = select_range.cloneContents().childNodes;
                             } else {
                                 select_node = [];
-                                // setCurrentSelect();
-                                console.log(getSelectionOffsetRelativeTo($(this).get(0), ""));
-                                // console.log($(this)[0].childNodes[getCaretPosition($(this))]);
-
-
+                                setCurrentSelect();
                             }
                         });
                     },
@@ -136,9 +132,7 @@ $(document).ready(function(e) {
                             }
                             setEndOfContenteditable($(this).get(0));
                         }
-                        // $(this)[0].childNodes[getCaretPosition($(this))]
-                        console.log(getSelectionOffsetRelativeTo($(this).get(0), ""));
-                        // console.log();
+                        setCurrentSelect();
                     },
                 })
                 .click(function() {
@@ -273,16 +267,31 @@ function getSelectionOffsetRelativeTo(parentElement, currentNode) {
     }
 
     return offset + getSelectionOffsetRelativeTo(parentElement, currentNode.parentNode);
-
 }
 
 function getCurrentSelect(property) {
     if (property == "font-family")
-        return $('#setting_text > .select_div > div').text();
+        return removeQuotes($('#setting_text > .select_div > div').text());
 
     return "";
 }
 
-function setCurrentSelect(element, property) {
+function setCurrentSelect() {
+    var currentSelection, currentRange, font_family;
 
+    currentSelection = window.getSelection();
+    currentRange = currentSelection.getRangeAt(0);
+    if (currentRange.startContainer.nodeName.includes("text"))
+        font_family = $(currentRange.startContainer.parentNode).css("font-family");
+    else
+        font_family = $(currentRange.startContainer).css("font-family");
+
+    $('#setting_text > .select_div > div').text(removeQuotes(font_family));
+}
+
+function removeQuotes(str) {
+    if (str.charAt(0) === '"' && str.charAt(str.length - 1) === '"')
+        return str.substr(1, str.length - 2);
+    else
+        return str;
 }
