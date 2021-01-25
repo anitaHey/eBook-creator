@@ -146,6 +146,13 @@ $(document).ready(function(e) {
 
     });
 
+    $('#text-color-picker').spectrum({
+        type: "text",
+        showPaletteOnly: "true",
+        togglePaletteOnly: "true",
+        allowEmpty: "false"
+    });
+
     $('.view').click(function() {
         $('.setting_part').each(function() {
             $(this).hide();
@@ -170,12 +177,12 @@ $(document).ready(function(e) {
 
     $(".select_ul > li").click(function(e) {
         $(this).parent().prev().html($(this).text());
-        changeFont($(this).text(), true);
+        chanTextFont($(this).text(), true);
         new_select = false;
     });
 
     $(".select_ul > li").hover(function(e) {
-        changeFont($(this).text(), false);
+        chanTextFont($(this).text(), false);
     });
 });
 
@@ -204,7 +211,7 @@ function isBorder(obj, event, range) {
         return false;
 }
 
-function changeFont(font, change) {
+function changeTextFont(font, change) {
     if (select_node.length > 0) {
         var length = select_node.length;
         if (change) save_select_node = [];
@@ -223,7 +230,30 @@ function changeFont(font, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change) $('#setting_text > .select_div > div').next().hide();
+        if (change) $('#setting_text > .select_font > div').next().hide();
+    }
+}
+
+function changeTextColor(font, change) {
+    if (select_node.length > 0) {
+        var length = select_node.length;
+        if (change) save_select_node = [];
+        var node = document.createElement('span');
+        $(node).addClass("new_span");
+
+        for (var i = 0; i < length; i++) {
+            if (!change && new_select && save_select_node.length < length) {
+                save_select_node.push($(select_node[i]).css("font-family"));
+            }
+
+            $(select_node[i]).css("font-family", font);
+            node.appendChild($(select_node[i]).clone()[0]);
+        }
+
+        select_range.deleteContents();
+        select_range.insertNode(node);
+
+        if (change) $('#setting_text > .select_font > div').next().hide();
     }
 }
 
@@ -271,7 +301,7 @@ function getSelectionOffsetRelativeTo(parentElement, currentNode) {
 
 function getCurrentSelect(property) {
     if (property == "font-family")
-        return removeQuotes($('#setting_text > .select_div > div').text());
+        return removeQuotes($('#setting_text > .select_font > div').text());
 
     return "";
 }
@@ -286,7 +316,7 @@ function setCurrentSelect() {
     else
         font_family = $(currentRange.startContainer).css("font-family");
 
-    $('#setting_text > .select_div > div').text(removeQuotes(font_family));
+    $('#setting_text > .select_font > div').text(removeQuotes(font_family));
 }
 
 function removeQuotes(str) {

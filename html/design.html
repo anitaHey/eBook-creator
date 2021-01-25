@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../tool/bootstrap-4.0.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../tool/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="../tool/spectrum-2.0.5/dist/spectrum.min.css">
     <link rel="stylesheet" href="../css/design.css">
 </head>
 
@@ -38,8 +39,9 @@
             <div id="setting_page" class="layout_center setting_part">
                 setting page
             </div>
-            <div id="setting_text" class="layout_center setting_part">
-                <div class="select_div select_font">
+            <div id="setting_text" class=" setting_part">
+                <div class="mb-3">字型</div>
+                <div class="select_div select_font mb-5">
                     <div>Noto Sans TC</div>
                     <ul class="select_ul">
                         <li value="Noto Sans TC">Noto Sans TC</li>
@@ -58,6 +60,10 @@
                         <li value="Georgia">Georgia</li>
                     </ul>
                 </div>
+                <div class="mb-3">字體顏色</div>
+                <div class="select_div select_color mb-5">
+                    <input id="text-color-picker" class="color_picker" value='#276cb8' />
+                </div>
             </div>
         </div>
     </div>
@@ -65,6 +71,7 @@
 <script src="../tool/jquery-3.3.1.min.js"></script>
 <script src="../tool/jquery-ui/jquery-ui.min.js"></script>
 <script src="../tool/bootstrap-4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="../tool/spectrum-2.0.5/dist/spectrum.min.js"></script>
 <script src="../js/design.js"></script>
 
 </html>

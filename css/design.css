@@ -190,3 +190,7 @@ body {
   background: #525252;
   color:white;
 }
+
+.color_picker {
+    width:100%;
+}
