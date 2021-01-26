@@ -162,7 +162,11 @@ $(document).ready(function(e) {
         change: function(color) {
             changeTextColor(color.toHexString(), true);
             new_select = false;
-        }
+        },
+        hide: function(color) {
+            if(new_select)
+                setTextInit("color");
+        },
     });
 
     $('.view').click(function() {
@@ -250,7 +254,7 @@ function changeTextFont(font, change) {
         select_range.insertNode(node);
 
         if (change)
-            $('#setting_text > .select_font > div').next().hide(setTextInit(0, "font-family"));
+            $('#setting_text > .select_font > div').next().hide();
     }
 }
 
