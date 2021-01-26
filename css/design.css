@@ -175,6 +175,8 @@ body {
     list-style-type: none;
     padding: 0;
     margin: 0;
+
+    background-color: #fff;
 }
 
 .select_ul li:hover {
@@ -193,4 +195,8 @@ body {
 
 .color_picker {
     width:100%;
+}
+
+.z-index {
+    z-index : 1;
 }

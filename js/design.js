@@ -81,7 +81,8 @@ $(document).ready(function(e) {
                                         var p = jQuery('<span/>', {
                                             text: n,
                                             css: {
-                                                "font-family": getCurrentSelect("font-family")
+                                                "font-family": getCurrentSelect("font-family"),
+                                                "color": getCurrentSelect("text-color"),
                                             }
                                         });
                                         $(this).append(p);
@@ -92,7 +93,8 @@ $(document).ready(function(e) {
                                             var p = jQuery('<span/>', {
                                                 text: n,
                                                 css: {
-                                                    "font-family": getCurrentSelect("font-family")
+                                                    "font-family": getCurrentSelect("font-family"),
+                                                    "color": getCurrentSelect("text-color"),
                                                 }
                                             });
                                             $(this).append(p);
@@ -107,7 +109,8 @@ $(document).ready(function(e) {
                                                 var p = jQuery('<span/>', {
                                                     text: n,
                                                     css: {
-                                                        "font-family": getCurrentSelect("font-family")
+                                                        "font-family": getCurrentSelect("font-family"),
+                                                        "color": getCurrentSelect("text-color"),
                                                     }
                                                 });
                                                 $(new_div).append(p);
@@ -118,7 +121,8 @@ $(document).ready(function(e) {
                                                     var p = jQuery('<span/>', {
                                                         text: n,
                                                         css: {
-                                                            "font-family": getCurrentSelect("font-family")
+                                                            "font-family": getCurrentSelect("font-family"),
+                                                            "color": getCurrentSelect("text-color"),
                                                         }
                                                     });
                                                     $(new_div).append(p);
@@ -148,15 +152,24 @@ $(document).ready(function(e) {
 
     $('#text-color-picker').spectrum({
         type: "text",
-        showPaletteOnly: "true",
-        togglePaletteOnly: "true",
-        allowEmpty: "false"
+        showInput: "true",
+        showInitial: "true",
+        allowEmpty: "false",
+        color: "black",
+        move: function(color) {
+            changeTextColor(color.toHexString(), false);
+        },
+        change: function(color) {
+            changeTextColor(color.toHexString(), true);
+            new_select = false;
+        }
     });
 
     $('.view').click(function() {
         $('.setting_part').each(function() {
             $(this).hide();
         });
+        $('#setting_text > .select_font > div').next().hide(0, setTextInit("font-family"));
 
         $('#setting_page').show();
     });
@@ -171,18 +184,22 @@ $(document).ready(function(e) {
         event.preventDefault();
     });
 
+    $(".color_picker").mousedown(function(e) {
+        event.preventDefault();
+    });
+
     $(".select_div > div").click(function(e) {
         $(this).next().toggle();
     });
 
     $(".select_ul > li").click(function(e) {
         $(this).parent().prev().html($(this).text());
-        chanTextFont($(this).text(), true);
+        changeTextFont($(this).text(), true);
         new_select = false;
     });
 
     $(".select_ul > li").hover(function(e) {
-        chanTextFont($(this).text(), false);
+        changeTextFont($(this).text(), false);
     });
 });
 
@@ -218,9 +235,11 @@ function changeTextFont(font, change) {
         var node = document.createElement('span');
         $(node).addClass("new_span");
 
+        font = removeQuotes(font);
+
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
-                save_select_node.push($(select_node[i]).css("font-family"));
+                save_select_node.push(removeQuotes($(select_node[i]).css("font-family")));
             }
 
             $(select_node[i]).css("font-family", font);
@@ -230,11 +249,12 @@ function changeTextFont(font, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change) $('#setting_text > .select_font > div').next().hide();
+        if (change)
+            $('#setting_text > .select_font > div').next().hide(setTextInit(0, "font-family"));
     }
 }
 
-function changeTextColor(font, change) {
+function changeTextColor(color, change) {
     if (select_node.length > 0) {
         var length = select_node.length;
         if (change) save_select_node = [];
@@ -243,17 +263,18 @@ function changeTextColor(font, change) {
 
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
-                save_select_node.push($(select_node[i]).css("font-family"));
+                save_select_node.push($(select_node[i]).css("color"));
             }
 
-            $(select_node[i]).css("font-family", font);
+            $(select_node[i]).css("color", color);
             node.appendChild($(select_node[i]).clone()[0]);
         }
 
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change) $('#setting_text > .select_font > div').next().hide();
+        if (change)
+            $("#text-color-picker").spectrum("hide");
     }
 }
 
@@ -302,21 +323,27 @@ function getSelectionOffsetRelativeTo(parentElement, currentNode) {
 function getCurrentSelect(property) {
     if (property == "font-family")
         return removeQuotes($('#setting_text > .select_font > div').text());
+    else if (property == "text-color")
+        return $("#text-color-picker").spectrum("get");
 
     return "";
 }
 
 function setCurrentSelect() {
-    var currentSelection, currentRange, font_family;
+    var currentSelection, currentRange, font_family, text_color;
 
     currentSelection = window.getSelection();
     currentRange = currentSelection.getRangeAt(0);
-    if (currentRange.startContainer.nodeName.includes("text"))
+    if (currentRange.startContainer.nodeName.includes("text")) {
         font_family = $(currentRange.startContainer.parentNode).css("font-family");
-    else
+        text_color = $(currentRange.startContainer.parentNode).css("color");
+    } else {
         font_family = $(currentRange.startContainer).css("font-family");
+        text_color = $(currentRange.startContainer).css("color");
+    }
 
     $('#setting_text > .select_font > div').text(removeQuotes(font_family));
+    $("#text-color-picker").spectrum("set", text_color);
 }
 
 function removeQuotes(str) {
@@ -324,4 +351,23 @@ function removeQuotes(str) {
         return str.substr(1, str.length - 2);
     else
         return str;
+}
+
+function setTextInit(property) {
+    if (select_node.length > 0) {
+        var length = select_node.length;
+        var node = document.createElement('span');
+        $(node).addClass("new_span");
+
+        for (var i = 0; i < length; i++) {
+            $(select_node[i]).css( property, save_select_node[i]);
+            node.appendChild($(select_node[i]).clone()[0]);
+        }
+
+        select_range.deleteContents();
+        select_range.insertNode(node);
+
+        select_node= [];
+        save_select_node = [];
+    }
 }
