@@ -173,7 +173,7 @@ $(document).ready(function(e) {
         $('.setting_part').each(function() {
             $(this).hide();
         });
-        $('#setting_text > .select_font > div').next().hide(0, setTextInit("font-family"));
+        $('#setting_text > .select_font .select_ul').hide(0, setTextInit("font-family"));
 
         $('#setting_page').show();
     });
@@ -184,26 +184,39 @@ $(document).ready(function(e) {
 
     $(".select_ul").hide();
 
-    $(".select_div > div").mousedown(function(e) {
+    $(".select_input, .input_picker, .setting_btn_sm").mousedown(function(e) {
         event.preventDefault();
     });
 
-    $(".color_picker").mousedown(function(e) {
-        event.preventDefault();
-    });
-
-    $(".select_div > div").click(function(e) {
-        $(this).next().toggle();
+    $(".select_input").click(function(e) {
+        $(this).parents(".select_div").children(".select_ul").toggle();
     });
 
     $(".select_ul > li").click(function(e) {
         $(this).parent().prev().html($(this).text());
-        changeTextFont($(this).text(), true);
+
+        if($(this).parent().parent().hasClass("select_font"))
+            changeTextFont($(this).text(), true);
+        // else if($(this).parent().hasClass("select_font_size"))
+
         new_select = false;
     });
 
     $(".select_ul > li").hover(function(e) {
-        changeTextFont($(this).text(), false);
+        if($(this).parent().parent().hasClass("select_font"))
+            changeTextFont($(this).text(), false);
+        // changeTextFont($(this).text(), false);
+    });
+
+    $("#font_size_m").click(function(){
+        var num = $(".select_font_size .select_input").text();
+        if(num != 0)
+            $(".select_font_size .select_input").text(parseInt(num)-1);
+    });
+
+    $("#font_size_p").click(function(){
+        var num = $(".select_font_size .select_input").text();
+        $(".select_font_size .select_input").text(parseInt(num)+1);
     });
 });
 
@@ -254,7 +267,7 @@ function changeTextFont(font, change) {
         select_range.insertNode(node);
 
         if (change)
-            $('#setting_text > .select_font > div').next().hide();
+            $('#setting_text > .select_font .select_ul').hide();
     }
 }
 
@@ -326,7 +339,7 @@ function getSelectionOffsetRelativeTo(parentElement, currentNode) {
 
 function getCurrentSelect(property) {
     if (property == "font-family")
-        return removeQuotes($('#setting_text > .select_font > div').text());
+        return removeQuotes($('#setting_text > .select_font .select_input').text());
     else if (property == "text-color")
         return $("#text-color-picker").spectrum("get");
 
