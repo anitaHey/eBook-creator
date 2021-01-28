@@ -3,6 +3,7 @@ var select_node = new Array();
 var save_select_node = new Array();
 var new_select = true;
 var select_range;
+var current_property = "";
 
 
 $(document).ready(function(e) {
@@ -83,6 +84,7 @@ $(document).ready(function(e) {
                                             css: {
                                                 "font-family": getCurrentSelect("font-family"),
                                                 "color": getCurrentSelect("text-color"),
+                                                "font-size": getCurrentSelect("font-size"),
                                             }
                                         });
                                         $(this).append(p);
@@ -95,6 +97,7 @@ $(document).ready(function(e) {
                                                 css: {
                                                     "font-family": getCurrentSelect("font-family"),
                                                     "color": getCurrentSelect("text-color"),
+                                                    "font-size": getCurrentSelect("font-size"),
                                                 }
                                             });
                                             $(this).append(p);
@@ -111,6 +114,7 @@ $(document).ready(function(e) {
                                                     css: {
                                                         "font-family": getCurrentSelect("font-family"),
                                                         "color": getCurrentSelect("text-color"),
+                                                        "font-size": getCurrentSelect("font-size"),
                                                     }
                                                 });
                                                 $(new_div).append(p);
@@ -123,6 +127,7 @@ $(document).ready(function(e) {
                                                         css: {
                                                             "font-family": getCurrentSelect("font-family"),
                                                             "color": getCurrentSelect("text-color"),
+                                                            "font-size": getCurrentSelect("font-size"),
                                                         }
                                                     });
                                                     $(new_div).append(p);
@@ -164,8 +169,8 @@ $(document).ready(function(e) {
             new_select = false;
         },
         hide: function(color) {
-            if(new_select)
-                setTextInit("color");
+            // if(new_select)
+            setTextInit();
         },
     });
 
@@ -173,7 +178,8 @@ $(document).ready(function(e) {
         $('.setting_part').each(function() {
             $(this).hide();
         });
-        $('#setting_text > .select_font .select_ul').hide(0, setTextInit("font-family"));
+        $('.select_ul').hide(0, setTextInit());
+        // $('#setting_text > .select_font .select_ul').hide(0, setTextInit("font-size"));
 
         $('#setting_page').show();
     });
@@ -193,11 +199,12 @@ $(document).ready(function(e) {
     });
 
     $(".select_ul > li").click(function(e) {
-        $(this).parent().prev().html($(this).text());
+        $(this).parents(".select_div").find(".select_input").html($(this).text());
 
         if($(this).parent().parent().hasClass("select_font"))
             changeTextFont($(this).text(), true);
-        // else if($(this).parent().hasClass("select_font_size"))
+        else if($(this).parent().hasClass("select_font_size"))
+            changeTextSize($(this).text(), true);
 
         new_select = false;
     });
@@ -205,18 +212,25 @@ $(document).ready(function(e) {
     $(".select_ul > li").hover(function(e) {
         if($(this).parent().parent().hasClass("select_font"))
             changeTextFont($(this).text(), false);
-        // changeTextFont($(this).text(), false);
+        else if($(this).parent().parent().hasClass("select_font_size"))
+            changeTextSize($(this).text(), false);
     });
 
     $("#font_size_m").click(function(){
         var num = $(".select_font_size .select_input").text();
-        if(num != 0)
+        if(num != 0) {
             $(".select_font_size .select_input").text(parseInt(num)-1);
+            changeTextSize(parseInt(num)-1, true);
+        }
+
+        new_select = false;
     });
 
     $("#font_size_p").click(function(){
         var num = $(".select_font_size .select_input").text();
         $(".select_font_size .select_input").text(parseInt(num)+1);
+        changeTextSize(parseInt(num)+1, true);
+        new_select = false;
     });
 });
 
@@ -257,6 +271,7 @@ function changeTextFont(font, change) {
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
                 save_select_node.push(removeQuotes($(select_node[i]).css("font-family")));
+                current_property = "font-family";
             }
 
             $(select_node[i]).css("font-family", font);
@@ -266,8 +281,10 @@ function changeTextFont(font, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change)
+        if (change) {
             $('#setting_text > .select_font .select_ul').hide();
+            current_property = "";
+        }
     }
 }
 
@@ -281,6 +298,7 @@ function changeTextColor(color, change) {
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
                 save_select_node.push($(select_node[i]).css("color"));
+                current_property = "color";
             }
 
             $(select_node[i]).css("color", color);
@@ -290,8 +308,37 @@ function changeTextColor(color, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change)
+        if (change){
             $("#text-color-picker").spectrum("hide");
+            current_property = "";
+        }
+    }
+}
+
+function changeTextSize(size, change) {
+    if (select_node.length > 0) {
+        var length = select_node.length;
+        if (change) save_select_node = [];
+        var node = document.createElement('span');
+        $(node).addClass("new_span");
+
+        for (var i = 0; i < length; i++) {
+            if (!change && new_select && save_select_node.length < length) {
+                save_select_node.push($(select_node[i]).css("font-size"));
+                current_property = "font-size";
+            }
+
+            $(select_node[i]).css("font-size", parseInt(size));
+            node.appendChild($(select_node[i]).clone()[0]);
+        }
+
+        select_range.deleteContents();
+        select_range.insertNode(node);
+
+        if (change){
+            $('#setting_text > .select_font_size .select_ul').hide();
+            current_property = "";
+        }
     }
 }
 
@@ -342,25 +389,30 @@ function getCurrentSelect(property) {
         return removeQuotes($('#setting_text > .select_font .select_input').text());
     else if (property == "text-color")
         return $("#text-color-picker").spectrum("get");
+    else if (property == "font-size")
+        return parseInt($('#setting_text > .select_font_size .select_input').text());
 
     return "";
 }
 
 function setCurrentSelect() {
-    var currentSelection, currentRange, font_family, text_color;
+    var currentSelection, currentRange, font_family, text_color, font_size;
 
     currentSelection = window.getSelection();
     currentRange = currentSelection.getRangeAt(0);
     if (currentRange.startContainer.nodeName.includes("text")) {
         font_family = $(currentRange.startContainer.parentNode).css("font-family");
         text_color = $(currentRange.startContainer.parentNode).css("color");
+        font_size = $(currentRange.startContainer.parentNode).css("font-size");
     } else {
         font_family = $(currentRange.startContainer).css("font-family");
         text_color = $(currentRange.startContainer).css("color");
+        font_size = $(currentRange.startContainer).css("font-size");
     }
 
-    $('#setting_text > .select_font > div').text(removeQuotes(font_family));
+    $('#setting_text > .select_font .select_input').text(removeQuotes(font_family));
     $("#text-color-picker").spectrum("set", text_color);
+    $('#setting_text > .select_font_size .select_input').text(font_size);
 }
 
 function removeQuotes(str) {
@@ -370,14 +422,14 @@ function removeQuotes(str) {
         return str;
 }
 
-function setTextInit(property) {
-    if (select_node.length > 0) {
+function setTextInit() {
+    if (select_node.length > 0 && current_property != "") {
         var length = select_node.length;
         var node = document.createElement('span');
         $(node).addClass("new_span");
 
         for (var i = 0; i < length; i++) {
-            $(select_node[i]).css( property, save_select_node[i]);
+            $(select_node[i]).css( current_property, save_select_node[i]);
             node.appendChild($(select_node[i]).clone()[0]);
         }
 
