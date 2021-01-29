@@ -201,36 +201,177 @@ $(document).ready(function(e) {
     $(".select_ul > li").click(function(e) {
         $(this).parents(".select_div").find(".select_input").html($(this).text());
 
-        if($(this).parent().parent().hasClass("select_font"))
+        if ($(this).parent().parent().hasClass("select_font"))
             changeTextFont($(this).text(), true);
-        else if($(this).parent().hasClass("select_font_size"))
+        else if ($(this).parent().hasClass("select_font_size"))
             changeTextSize($(this).text(), true);
 
         new_select = false;
     });
 
     $(".select_ul > li").hover(function(e) {
-        if($(this).parent().parent().hasClass("select_font"))
+        if ($(this).parent().parent().hasClass("select_font"))
             changeTextFont($(this).text(), false);
-        else if($(this).parent().parent().hasClass("select_font_size"))
+        else if ($(this).parent().parent().hasClass("select_font_size"))
             changeTextSize($(this).text(), false);
     });
 
-    $("#font_size_m").click(function(){
+    $("#font_size_m").click(function() {
         var num = $(".select_font_size .select_input").text();
-        if(num != 0) {
-            $(".select_font_size .select_input").text(parseInt(num)-1);
-            changeTextSize(parseInt(num)-1, true);
+        if (num != 0) {
+            $(".select_font_size .select_input").text(parseInt(num) - 1);
+            changeTextSize(parseInt(num) - 1, true);
         }
 
         new_select = false;
     });
 
-    $("#font_size_p").click(function(){
+    $("#font_size_p").click(function() {
         var num = $(".select_font_size .select_input").text();
-        $(".select_font_size .select_input").text(parseInt(num)+1);
-        changeTextSize(parseInt(num)+1, true);
+        $(".select_font_size .select_input").text(parseInt(num) + 1);
+        changeTextSize(parseInt(num) + 1, true);
         new_select = false;
+    });
+
+    $('#pic_upload').on('change', function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                jQuery('<div/>', {
+                        "class": 'object pic',
+                        'tabindex': 1,
+                        'css':{
+                            'cursor': 'move'
+                        },
+                    })
+                    .draggable({ revert: 'invalid' })
+                    .resizable({
+                        handles: "ne, se, sw, nw",
+                    })
+                    .click(function() {
+                        event.stopPropagation();
+                    })
+                    .appendTo('.view')
+                    .focus(function() {
+                        obj_click(true, 'setting_pic', $(this));
+                    })
+                    .focusout(function() {
+                        obj_click(false, 'setting_pic', $(this));
+                    })
+                    .append(
+                        jQuery('<img/>', {
+                            'src': e.target.result,
+                            'class': 'w-100 h-100',
+                        })
+                        // .on({
+                        //     selectstart: function(event) {
+                        //         $(this).one('mouseup', function() {
+                        //             new_select = false;
+                        //             $('.new_span').children().unwrap();
+                        //             var sel = window.getSelection();
+
+                        //             if (sel.toString().length > 0) {
+                        //                 select_range = sel.getRangeAt(0);
+                        //                 new_select = true;
+                        //                 select_node = select_range.cloneContents().childNodes;
+                        //             } else {
+                        //                 select_node = [];
+                        //                 setCurrentSelect();
+                        //             }
+                        //         });
+                        //     },
+                        //     compositionstart: function(event) {
+                        //         input_state = 0;
+                        //     },
+                        //     compositionend: function(event) {
+                        //         input_state = 1;
+                        //     },
+                        //     keyup: function(event) {
+                        //         if (input_state == 1 && event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40 && event.keyCode != 229) {
+                        //             var text = $.parseHTML(event.target.innerHTML);
+                        //             $(this).empty();
+
+                        //             for (var i of text) {
+                        //                 if (i.nodeName.includes("text")) {
+                        //                     for (var n of i.nodeValue) {
+                        //                         var p = jQuery('<span/>', {
+                        //                             text: n,
+                        //                             css: {
+                        //                                 "font-family": getCurrentSelect("font-family"),
+                        //                                 "color": getCurrentSelect("text-color"),
+                        //                                 "font-size": getCurrentSelect("font-size"),
+                        //                             }
+                        //                         });
+                        //                         $(this).append(p);
+                        //                     }
+                        //                 } else if (i.nodeName == "SPAN") {
+                        //                     if (i.innerText.length > 1) {
+                        //                         for (var n of i.innerText) {
+                        //                             var p = jQuery('<span/>', {
+                        //                                 text: n,
+                        //                                 css: {
+                        //                                     "font-family": getCurrentSelect("font-family"),
+                        //                                     "color": getCurrentSelect("text-color"),
+                        //                                     "font-size": getCurrentSelect("font-size"),
+                        //                                 }
+                        //                             });
+                        //                             $(this).append(p);
+                        //                         }
+                        //                     } else $(this).append(i);
+                        //                 } else if (i.nodeName == "DIV") {
+                        //                     var new_div = jQuery('<div/>');
+                        //                     var div_text = $.parseHTML(i.innerHTML);
+                        //                     for (var inn of div_text) {
+                        //                         if (inn.nodeName.includes("text")) {
+                        //                             for (var n of inn.nodeValue) {
+                        //                                 var p = jQuery('<span/>', {
+                        //                                     text: n,
+                        //                                     css: {
+                        //                                         "font-family": getCurrentSelect("font-family"),
+                        //                                         "color": getCurrentSelect("text-color"),
+                        //                                         "font-size": getCurrentSelect("font-size"),
+                        //                                     }
+                        //                                 });
+                        //                                 $(new_div).append(p);
+                        //                             }
+                        //                         } else if (inn.nodeName == "SPAN") {
+                        //                             if (inn.innerText.length > 1) {
+                        //                                 for (var n of inn.innerText) {
+                        //                                     var p = jQuery('<span/>', {
+                        //                                         text: n,
+                        //                                         css: {
+                        //                                             "font-family": getCurrentSelect("font-family"),
+                        //                                             "color": getCurrentSelect("text-color"),
+                        //                                             "font-size": getCurrentSelect("font-size"),
+                        //                                         }
+                        //                                     });
+                        //                                     $(new_div).append(p);
+                        //                                 }
+                        //                             } else $(new_div).append(inn);
+                        //                         }
+                        //                     }
+
+                        //                     $(this).append(new_div);
+                        //                 }
+                        //             }
+                        //             setEndOfContenteditable($(this).get(0));
+                        //         }
+                        //         setCurrentSelect();
+                        //     },
+                        // })
+                        .click(function() {
+                            obj_click(true, 'setting_pic', $(this).parent());
+                        })
+                        .focusout(function() {
+                            obj_click(false, 'setting_pic', $(this).parent());
+                        })
+                    )
+                    .focus();
+            }
+
+            reader.readAsDataURL(this.files[0]);
+        }
     });
 });
 
@@ -308,7 +449,7 @@ function changeTextColor(color, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change){
+        if (change) {
             $("#text-color-picker").spectrum("hide");
             current_property = "";
         }
@@ -335,7 +476,7 @@ function changeTextSize(size, change) {
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        if (change){
+        if (change) {
             $('#setting_text > .select_font_size .select_ul').hide();
             current_property = "";
         }
@@ -429,14 +570,14 @@ function setTextInit() {
         $(node).addClass("new_span");
 
         for (var i = 0; i < length; i++) {
-            $(select_node[i]).css( current_property, save_select_node[i]);
+            $(select_node[i]).css(current_property, save_select_node[i]);
             node.appendChild($(select_node[i]).clone()[0]);
         }
 
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        select_node= [];
+        select_node = [];
         save_select_node = [];
     }
 }
