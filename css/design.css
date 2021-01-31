@@ -167,9 +167,9 @@ body {
 .select_ul {
     position: absolute;
     top: 40px;
-    left:0;
+    left: 0;
 
-    height:200px;
+    height: 200px;
     width: 100%;
     overflow: auto;
     border: 1px #000 solid;
@@ -186,17 +186,18 @@ body {
 }
 
 .view *::selection {
-  background: #525252;
-  color:white;
+    background: #525252;
+    color: white;
 }
 
-.view *::-moz-selection { /* Code for Firefox */
-  background: #525252;
-  color:white;
+.view *::-moz-selection {
+    /* Code for Firefox */
+    background: #525252;
+    color: white;
 }
 
 .input_picker {
-    width:100%;
+    width: 100%;
 }
 
 .select_font_size .select_input {
@@ -204,19 +205,38 @@ body {
 }
 
 .z-index {
-    z-index : 1;
+    z-index: 1;
 }
 
 .setting_btn_sm {
-    height:40px;
-    width:40px;
+    height: 40px;
+    width: 40px;
     background-color: #414141;
-    border:0;
-    color:white;
+    border: 0;
+    color: white;
 }
 
 .setting_btn_sm:hover {
     background-color: #7d7a7a;
+}
+
+.btn_img_sm img {
+    padding: 2px;
+    width:100%;
+    height:100%;
+}
+
+.btn_img_sm {
+    height: 50px;
+    width: 50px;
+
+    background-color: transparent;
+    border: 2px solid black;
+    margin-right: 5px;
+}
+
+.btn_img_sm:hover {
+    background-color: #bfb8b8;
 }
 
 input[type="file"] {
