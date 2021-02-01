@@ -241,7 +241,7 @@ $(document).ready(function(e) {
                 jQuery('<div/>', {
                         "class": 'object pic',
                         'tabindex': 1,
-                        'css':{
+                        'css': {
                             'cursor': 'move'
                         },
                     })
@@ -250,25 +250,23 @@ $(document).ready(function(e) {
                         handles: "ne, se, sw, nw",
                     })
                     .click(function() {
+                        $(this).focus();
                         event.stopPropagation();
                     })
                     .appendTo('.view')
                     .focus(function() {
+                        select_node = $(this);
                         obj_click(true, 'setting_pic', $(this));
+                        console.log(select_node);
                     })
                     .focusout(function() {
+                        select_node = [];
                         obj_click(false, 'setting_pic', $(this));
                     })
                     .append(
                         jQuery('<img/>', {
                             'src': e.target.result,
                             'class': 'w-100 h-100',
-                        })
-                        .click(function() {
-                            obj_click(true, 'setting_pic', $(this).parent());
-                        })
-                        .focusout(function() {
-                            obj_click(false, 'setting_pic', $(this).parent());
                         })
                     )
                     .focus();
@@ -277,6 +275,23 @@ $(document).ready(function(e) {
             reader.readAsDataURL(this.files[0]);
         }
     });
+
+    $('#img_left_rotate').click(function(){
+
+    });
+
+    $('#img_right_rotate').click(function(){
+
+    });
+
+    $('#img_hor_reverse').click(function(){
+
+    });
+
+    $('#img_vir_reverse').click(function(){
+
+    });
+
 });
 
 function obj_click(focus, id, obj) {
@@ -483,5 +498,37 @@ function setTextInit() {
 
         select_node = [];
         save_select_node = [];
+    }
+}
+
+function imgRotate(type, num) {
+    if(select_node.lnegth > 0){
+        var new_css = "";
+        var css = $(select_node[0]).css("transform");
+        css = css.split(" ");
+
+        for(var a = 0; a < css.length; a++) {
+            var tem = css[a].split("(");
+            var value = "";
+            if(tem[0] == "rotate" && type == "rotate") {
+                value = parseInt(tem[1].split("d")[0]);
+                value = value + num;
+
+                new_css = new_css + " rotate(" + value + "deg)";
+            } else if(tem[0] == "scaleY" && type == "scaleY"){
+                value = parseInt(tem[1].split(")")[0]);
+
+                new_css = new_css + " scaleY(" + -(value) + ")";
+            } else if(tem[0] == "scaleX" && type == "scaleX"){
+                value = parseInt(tem[1].split(")")[0]);
+
+                new_css = new_css + " scaleX(" + -(value) + ")";
+            } else {
+                new_css = new_css + " " + css;
+            }
+        }
+        css = css + " " + type + "(" + num + ")";
+
+        $(select_node[0]).css("transform", css);
     }
 }
