@@ -190,7 +190,7 @@ $(document).ready(function(e) {
 
     $(".select_ul").hide();
 
-    $(".select_input, .input_picker, .setting_btn_sm").mousedown(function(e) {
+    $(".select_input, .input_picker, .setting_btn_sm, .btn_img_sm").mousedown(function(e) {
         event.preventDefault();
     });
 
@@ -241,8 +241,11 @@ $(document).ready(function(e) {
                 jQuery('<div/>', {
                         "class": 'object pic',
                         'tabindex': 1,
+                        'data-rotate': 0,
+                        'data-scaleX': 1,
+                        'data-scaleY': 1,
                         'css': {
-                            'cursor': 'move'
+                            'cursor': 'move',
                         },
                     })
                     .draggable({ revert: 'invalid' })
@@ -257,7 +260,6 @@ $(document).ready(function(e) {
                     .focus(function() {
                         select_node = $(this);
                         obj_click(true, 'setting_pic', $(this));
-                        console.log(select_node);
                     })
                     .focusout(function() {
                         select_node = [];
@@ -276,20 +278,20 @@ $(document).ready(function(e) {
         }
     });
 
-    $('#img_left_rotate').click(function(){
-
+    $('#img_left_rotate').click(function() {
+        imgRotate("rotate", -90);
     });
 
-    $('#img_right_rotate').click(function(){
-
+    $('#img_right_rotate').click(function() {
+        imgRotate("rotate", 90);
     });
 
-    $('#img_hor_reverse').click(function(){
-
+    $('#img_hor_reverse').click(function() {
+        imgRotate("scaleX", 0);
     });
 
-    $('#img_vir_reverse').click(function(){
-
+    $('#img_vir_reverse').click(function() {
+        imgRotate("scaleY", 0);
     });
 
 });
@@ -502,33 +504,19 @@ function setTextInit() {
 }
 
 function imgRotate(type, num) {
-    if(select_node.lnegth > 0){
-        var new_css = "";
-        var css = $(select_node[0]).css("transform");
-        css = css.split(" ");
+    if (select_node.length > 0) {
+        var rotate = parseInt($(select_node[0]).attr("data-rotate"));
+        var scaleX = parseInt($(select_node[0]).attr("data-scaleX"));
+        var scaleY = parseInt($(select_node[0]).attr("data-scaleY"));
 
-        for(var a = 0; a < css.length; a++) {
-            var tem = css[a].split("(");
-            var value = "";
-            if(tem[0] == "rotate" && type == "rotate") {
-                value = parseInt(tem[1].split("d")[0]);
-                value = value + num;
+        if(type == "rotate") rotate = rotate + num;
+        else if(type == "scaleX") scaleX = -(scaleX);
+        else if(type == "scaleY") scaleY = -(scaleY);
 
-                new_css = new_css + " rotate(" + value + "deg)";
-            } else if(tem[0] == "scaleY" && type == "scaleY"){
-                value = parseInt(tem[1].split(")")[0]);
+        $(select_node[0]).attr("data-rotate", rotate);
+        $(select_node[0]).attr("data-scaleX", scaleX);
+        $(select_node[0]).attr("data-scaleY", scaleY);
 
-                new_css = new_css + " scaleY(" + -(value) + ")";
-            } else if(tem[0] == "scaleX" && type == "scaleX"){
-                value = parseInt(tem[1].split(")")[0]);
-
-                new_css = new_css + " scaleX(" + -(value) + ")";
-            } else {
-                new_css = new_css + " " + css;
-            }
-        }
-        css = css + " " + type + "(" + num + ")";
-
-        $(select_node[0]).css("transform", css);
+        $(select_node[0]).css("transform", "rotate(" + rotate + "deg) scaleX(" + scaleX + ") scaleY(" + scaleY + ")");
     }
 }
