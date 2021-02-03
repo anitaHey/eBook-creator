@@ -517,6 +517,7 @@ function imgRotate(type, num) {
         $(select_node[0]).attr("data-scaleX", scaleX);
         $(select_node[0]).attr("data-scaleY", scaleY);
 
-        $(select_node[0]).css("transform", "rotate(" + rotate + "deg) scaleX(" + scaleX + ") scaleY(" + scaleY + ")");
+        $(select_node[0]).css("transform", "rotate(" + rotate + "deg)");
+        $(select_node[0]).children("img").css("transform", "scaleX(" + scaleX + ") scaleY(" + scaleY + ")");
     }
 }
