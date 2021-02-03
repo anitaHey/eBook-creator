@@ -4,7 +4,8 @@ var save_select_node = new Array();
 var new_select = true;
 var select_range;
 var current_property = "";
-
+var arrowCenter = 0;
+var obj_rotate = false;
 
 $(document).ready(function(e) {
     $('.setting_part').each(function() {
@@ -266,6 +267,36 @@ $(document).ready(function(e) {
                         obj_click(false, 'setting_pic', $(this));
                     })
                     .append(
+                        jQuery('<span/>', {
+                            'text': "◆",
+                            'class': 'rotate_btn',
+                        })
+                        // .on({
+                        //     mousemove: function(event) {
+                        //         $(this).css('cursor', 'crosshair');
+                        //         arrowCenter = getCenter($(this).parent()[0]);
+                        //         parent = event.target.parentNode;
+                        //         const { left, top, width, height } = parent.getBoundingClientRect();
+
+                        //         if (obj_rotate) {
+                        //             var angle = Math.atan2((event.clientY-height) - arrowCenter.y, (event.clientX-width) - arrowCenter.x);
+                        //             angle = angle * (180/Math.PI);
+
+                        //             $(this).parent().attr("data-rotate", angle);
+                        //             $(this).parent().css("transform", "rotate(" + angle + "deg)");
+                        //         }
+                        //     },
+                        //     mousedown: function(event) {
+                        //         obj_rotate = true;
+                        //         $(this).parent().draggable("disable");
+                        //     },
+                        //     mouseup: function(event) {
+                        //         obj_rotate = false; 
+                        //         $(this).parent().draggable("enable");
+                        //     },
+                        // })
+                    )
+                    .append(
                         jQuery('<img/>', {
                             'src': e.target.result,
                             'class': 'w-100 h-100',
@@ -509,9 +540,9 @@ function imgRotate(type, num) {
         var scaleX = parseInt($(select_node[0]).attr("data-scaleX"));
         var scaleY = parseInt($(select_node[0]).attr("data-scaleY"));
 
-        if(type == "rotate") rotate = rotate + num;
-        else if(type == "scaleX") scaleX = -(scaleX);
-        else if(type == "scaleY") scaleY = -(scaleY);
+        if (type == "rotate") rotate = rotate + num;
+        else if (type == "scaleX") scaleX = -(scaleX);
+        else if (type == "scaleY") scaleY = -(scaleY);
 
         $(select_node[0]).attr("data-rotate", rotate);
         $(select_node[0]).attr("data-scaleX", scaleX);
@@ -520,4 +551,9 @@ function imgRotate(type, num) {
         $(select_node[0]).css("transform", "rotate(" + rotate + "deg)");
         $(select_node[0]).children("img").css("transform", "scaleX(" + scaleX + ") scaleY(" + scaleY + ")");
     }
+}
+
+function getCenter(element) {
+    const { left, top, width, height } = element.getBoundingClientRect();
+    return { x: left + width / 2, y: top + height / 2 }
 }

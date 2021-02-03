@@ -148,6 +148,19 @@ body {
     background-size: contain;
 }
 
+.object>.rotate_btn {
+    display: none;
+}
+
+/*.object_focus>.rotate_btn {
+    display: block;
+    font-size: 10px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+}*/
+
 .ui-resizable-se {
     right: -5px;
     bottom: -5px;
