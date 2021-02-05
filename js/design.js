@@ -623,7 +623,18 @@ function setPageZindex(node, type) {
         }
         else
             $(node).css("z-index", z_arr[0][1] -1);
-    else if(type == "insert") {
-
+    else if(type == "down") {
+        if($(node).css("z-index") == 2) {
+            $(node).css("z-index", 1);
+            for(var a = 0; a < z_arr.length; a++) {
+                $(z_arr[a][0]).css("z-index", z_arr[a][1]+1);
+            }
+        } else {
+            var tem = $(node).css("z-index");
+            $(node).css("z-index", tem-1);
+        }
+    } else if(type == "up") {
+        var tem = $(node).css("z-index");
+        $(node).css("z-index", tem+1);
     }
 }
