@@ -17,7 +17,9 @@
         <div class="obj_insert">
             <div class="page_setting">
                 <div class="layout_center align-items-center">
-                    <select id="page_select"></select>
+                    <select id="page_select">
+                        <option>1</option>
+                    </select>
                     / 共 <span class="page_all_num">10</span> 頁
                 </div>
                 <div class="inline_line mt-3 layout_center">
@@ -36,7 +38,9 @@
                 </div>
             </div>
         </div>
-        <div class="view"></div>
+        <div class="view">
+            <div class="page page1"></div>
+        </div>
         <div class="obj_setting">
             <div id="setting_page" class="layout_center setting_part">
                 setting page
@@ -86,6 +90,13 @@
                         <li value="72">72</li>
                     </ul>
                 </div>
+                <div class="mb-3">圖層轉換</div>
+                <div class="inline_line mb-5">
+                    <button class="btn_img_sm layer_all_down" data-toggle="tooltip" data-placement="bottom" title="移至最下層"><img src="../assets/image/all_down.png" alt=""></button>
+                    <button class="btn_img_sm layer_one_down" data-toggle="tooltip" data-placement="bottom" title="向下一層"><img src="../assets/image/one_down.png" alt=""></button>
+                    <button class="btn_img_sm layer_one_up" data-toggle="tooltip" data-placement="bottom" title="向上一層"><img src="../assets/image/one_up.png" alt=""></button>
+                    <button class="btn_img_sm layer_all_up" data-toggle="tooltip" data-placement="bottom" title="移至最上層"><img src="../assets/image/all_up.png" alt=""></button>
+                </div>
             </div>
             <div id="setting_pic" class=" setting_part">
                 <div class="mb-3">圖片旋轉</div>
@@ -96,11 +107,11 @@
                     <button id="img_vir_reverse" class="btn_img_sm" data-toggle="tooltip" data-placement="bottom" title="垂直顛倒"><img src="../assets/image/rotate_vir.png" alt=""></button>
                 </div>
                 <div class="mb-3">圖層轉換</div>
-                <div class="inline_line">
-                    <button id="" class="btn_img_sm" data-toggle="tooltip" data-placement="bottom" title="移至最下層"><img src="../assets/image/all_down.png" alt=""></button>
-                    <button id="" class="btn_img_sm" data-toggle="tooltip" data-placement="bottom" title="向下一層"><img src="../assets/image/one_down.png" alt=""></button>
-                    <button id="" class="btn_img_sm" data-toggle="tooltip" data-placement="bottom" title="向上一層"><img src="../assets/image/one_up.png" alt=""></button>
-                    <button id="" class="btn_img_sm" data-toggle="tooltip" data-placement="bottom" title="移至最上層"><img src="../assets/image/all_up.png" alt=""></button>
+                <div class="inline_line mb-5">
+                    <button class="btn_img_sm layer_all_down" data-toggle="tooltip" data-placement="bottom" title="移至最下層"><img src="../assets/image/all_down.png" alt=""></button>
+                    <button class="btn_img_sm layer_one_down" data-toggle="tooltip" data-placement="bottom" title="向下一層"><img src="../assets/image/one_down.png" alt=""></button>
+                    <button class="btn_img_sm layer_one_up" data-toggle="tooltip" data-placement="bottom" title="向上一層"><img src="../assets/image/one_up.png" alt=""></button>
+                    <button class="btn_img_sm layer_all_up" data-toggle="tooltip" data-placement="bottom" title="移至最上層"><img src="../assets/image/all_up.png" alt=""></button>
                 </div>
             </div>
         </div>

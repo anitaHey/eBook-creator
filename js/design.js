@@ -6,6 +6,7 @@ var select_range;
 var current_property = "";
 var arrowCenter = 0;
 var obj_rotate = false;
+var click_child = false;
 
 $(document).ready(function(e) {
     $('.setting_part').each(function() {
@@ -18,6 +19,9 @@ $(document).ready(function(e) {
         jQuery('<div/>', {
                 "class": 'object text',
                 'tabindex': 1,
+                "css": {
+                    "z-index": 0,
+                }
             })
             .on({
                 mousemove: function(event) {
@@ -35,9 +39,13 @@ $(document).ready(function(e) {
                 handles: "ne, se, sw, nw",
             })
             .click(function() {
+                if (!click_child)
+                    select_node = $(this);
+
+                click_child = false;
                 event.stopPropagation();
             })
-            .appendTo('.view')
+            .appendTo('.view > .page' + getCurrentPage())
             .focus(function() {
                 obj_click(true, 'setting_text', $(this));
             })
@@ -147,6 +155,7 @@ $(document).ready(function(e) {
                 })
                 .click(function() {
                     obj_click(true, 'setting_text', $(this).parent());
+                    click_child = true;
                 })
                 .focusout(function() {
                     obj_click(false, 'setting_text', $(this).parent());
@@ -247,6 +256,7 @@ $(document).ready(function(e) {
                         'data-scaleY': 1,
                         'css': {
                             'cursor': 'move',
+                            "z-index": 0,
                         },
                     })
                     .draggable({ revert: 'invalid' })
@@ -257,7 +267,7 @@ $(document).ready(function(e) {
                         $(this).focus();
                         event.stopPropagation();
                     })
-                    .appendTo('.view')
+                    .appendTo('.view > .page' + getCurrentPage())
                     .focus(function() {
                         select_node = $(this);
                         obj_click(true, 'setting_pic', $(this));
@@ -325,7 +335,39 @@ $(document).ready(function(e) {
         imgRotate("scaleY", 0);
     });
 
+    $('.layer_all_down').click(function() {
+        if(select_node.length > 0) {
+            var num = getPageZindex($(select_node[0]), "down");
+            $(select_node[0]).css("z-index", num);
+        }
+    });
+
+    $('.layer_one_down').click(function() {
+        if(select_node.length > 0) {
+            var num = $(select_node[0]).css("z-index")-1;
+            $(select_node[0]).css("z-index", num);
+        }
+    });
+
+    $('.layer_one_up').click(function() {
+        if(select_node.length > 0) {
+            var num = $(select_node[0]).css("z-index")+1;
+            $(select_node[0]).css("z-index", num);
+        }
+    });
+
+    $('.layer_all_up').click(function() {
+        if(select_node.length > 0) {
+            var num = getPageZindex($(select_node[0]), "up");
+            $(select_node[0]).css("z-index", num);
+        }
+    });
+
 });
+
+function getCurrentPage() {
+    return $("#page_select").val();
+}
 
 function obj_click(focus, id, obj) {
     if (focus) {
@@ -556,4 +598,32 @@ function imgRotate(type, num) {
 function getCenter(element) {
     const { left, top, width, height } = element.getBoundingClientRect();
     return { x: left + width / 2, y: top + height / 2 }
+}
+
+function setPageZindex(node, type) {
+    var childNodes = $(node).parents(".page")[0].childNodes;
+    var z_arr = [];
+    for (var a = 0; a < childNodes.length; a++) {
+        if(childNodes[a] != node)
+            z_arr.push([$(childNodes[a]), $(childNodes[a]).css("z-index")]);
+    }
+
+    z_arr.sort(function(a, b) {
+        return a[1] - b[1]
+    });
+
+    if (type == "max") 
+        $(node).css("z-index", z_arr[z_arr.length - 1][1] +1);
+    else if(type == "min")
+        if(z_arr[0][1] == 1) {
+            $(node).css("z-index", 1);
+            for(var a = 0; a < z_arr.length; a++) {
+                $(z_arr[a][0]).css("z-index", z_arr[a][1]+1);
+            }
+        }
+        else
+            $(node).css("z-index", z_arr[0][1] -1);
+    else if(type == "insert") {
+
+    }
 }
