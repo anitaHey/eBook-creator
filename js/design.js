@@ -19,8 +19,9 @@ $(document).ready(function(e) {
         jQuery('<div/>', {
                 "class": 'object text',
                 'tabindex': 1,
+                "data-name": getObjName("text"),
                 "css": {
-                    "z-index": 0,
+                    "z-index": 1,
                 }
             })
             .on({
@@ -204,6 +205,13 @@ $(document).ready(function(e) {
         event.preventDefault();
     });
 
+    // $(".obj_name").mousedown(function(e) {
+    //     setEndOfContenteditable($(this));
+    //     event.preventDefault();
+    // });
+
+    
+
     $(".select_input").click(function(e) {
         $(this).parents(".select_div").children(".select_ul").toggle();
     });
@@ -254,9 +262,10 @@ $(document).ready(function(e) {
                         'data-rotate': 0,
                         'data-scaleX': 1,
                         'data-scaleY': 1,
+                        "data-name": getObjName("pic"),
                         'css': {
                             'cursor': 'move',
-                            "z-index": 0,
+                            "z-index": 1,
                         },
                     })
                     .draggable({ revert: 'invalid' })
@@ -336,33 +345,34 @@ $(document).ready(function(e) {
     });
 
     $('.layer_all_down').click(function() {
-        if(select_node.length > 0) {
-            var num = getPageZindex($(select_node[0]), "down");
-            $(select_node[0]).css("z-index", num);
+        if (select_node.length > 0) {
+            setPageZindex($(select_node[0]), "min");
         }
     });
 
     $('.layer_one_down').click(function() {
-        if(select_node.length > 0) {
-            var num = $(select_node[0]).css("z-index")-1;
-            $(select_node[0]).css("z-index", num);
+        if (select_node.length > 0) {
+            setPageZindex($(select_node[0]), "down");
         }
     });
 
     $('.layer_one_up').click(function() {
-        if(select_node.length > 0) {
-            var num = $(select_node[0]).css("z-index")+1;
-            $(select_node[0]).css("z-index", num);
+        if (select_node.length > 0) {
+            setPageZindex($(select_node[0]), "up");
         }
     });
 
     $('.layer_all_up').click(function() {
-        if(select_node.length > 0) {
-            var num = getPageZindex($(select_node[0]), "up");
-            $(select_node[0]).css("z-index", num);
+        if (select_node.length > 0) {
+            setPageZindex($(select_node[0]), "max");
         }
     });
 
+    $('.obj_name').change(function(){
+        if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
+            $(select_node[0]).attr("data-name", $(this).text);
+        }
+    });
 });
 
 function getCurrentPage() {
@@ -377,6 +387,7 @@ function obj_click(focus, id, obj) {
 
         $('#' + id).show();
         $(obj).addClass("object_focus");
+        if ($(obj).hasClass("object")) $(".obj_name").text($(obj).attr("data-name"));
     } else $(obj).removeClass("object_focus");
 
 }
@@ -604,37 +615,60 @@ function setPageZindex(node, type) {
     var childNodes = $(node).parents(".page")[0].childNodes;
     var z_arr = [];
     for (var a = 0; a < childNodes.length; a++) {
-        if(childNodes[a] != node)
-            z_arr.push([$(childNodes[a]), $(childNodes[a]).css("z-index")]);
+        if (childNodes[a] != node[0])
+            z_arr.push([$(childNodes[a]), parseInt($(childNodes[a]).css("z-index"))]);
     }
 
     z_arr.sort(function(a, b) {
         return a[1] - b[1]
     });
 
-    if (type == "max") 
-        $(node).css("z-index", z_arr[z_arr.length - 1][1] +1);
-    else if(type == "min")
-        if(z_arr[0][1] == 1) {
-            $(node).css("z-index", 1);
-            for(var a = 0; a < z_arr.length; a++) {
-                $(z_arr[a][0]).css("z-index", z_arr[a][1]+1);
+    if (type == "max")
+        $(node).css("z-index", z_arr[z_arr.length - 1][1] + 1);
+    else if (type == "min") {
+        if (z_arr[0][1] == 1) {
+            if (z_arr[0][1] == 1) {
+                for (var a = 0; a < z_arr.length; a++) {
+                    $(z_arr[a][0]).css("z-index", z_arr[a][1] + 1);
+                }
             }
-        }
-        else
-            $(node).css("z-index", z_arr[0][1] -1);
-    else if(type == "down") {
-        if($(node).css("z-index") == 2) {
-            $(node).css("z-index", 1);
-            for(var a = 0; a < z_arr.length; a++) {
-                $(z_arr[a][0]).css("z-index", z_arr[a][1]+1);
+        } else
+            $(node).css("z-index", z_arr[0][1] - 1);
+    } else if (type == "down") {
+        if ($(node).css("z-index") == 1) {
+            if (z_arr[0][1] == 1) {
+                for (var a = 0; a < z_arr.length; a++) {
+                    $(z_arr[a][0]).css("z-index", z_arr[a][1] + 1);
+                }
             }
         } else {
             var tem = $(node).css("z-index");
-            $(node).css("z-index", tem-1);
+            $(node).css("z-index", tem - 1);
         }
-    } else if(type == "up") {
+    } else if (type == "up") {
         var tem = $(node).css("z-index");
-        $(node).css("z-index", tem+1);
+        $(node).css("z-index", tem + 1);
     }
+}
+
+function getObjName(type) {
+    var childNodes = $(".page" + getCurrentPage())[0].childNodes;
+    var count = 1;
+    for (var a = 0; a < childNodes.length; a++) {
+        if ($(childNodes[a]).hasClass(type)) count++;
+    }
+
+    return getTypeLang("chi", type) + count;
+}
+
+function getTypeLang(lang, type) {
+    if (type == "text") {
+        if (lang == "eng") return "Text";
+        else if (lang == "chi") return "文字";
+    } else if (type == "pic") {
+        if (lang == "eng") return "Image";
+        else if (lang == "chi") return "圖片";
+    }
+
+    return "";
 }

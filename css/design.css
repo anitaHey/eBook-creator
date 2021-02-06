@@ -171,7 +171,7 @@ body {
     /*width: 80%;*/
 }
 
-.select_input {
+.select_input, .obj_name {
     height: 40px;
     border: 1px #000 solid;
     padding-left: 5px;
@@ -248,6 +248,12 @@ body {
     margin-right: 5px;
 }
 
+.img_sm {
+    height: 20px;
+    width: 20px;
+    padding:1px;
+}
+
 .btn_img_sm:hover {
     background-color: #bfb8b8;
 }
@@ -256,4 +262,14 @@ input[type="file"] {
     position: fixed;
     right: 100%;
     bottom: 100%;
+}
+
+.add_animate {
+    height: 40px;
+    border:0;
+    background-color: #d2d4c9;
+}
+
+.add_animate:hover {
+    background-color: #a7a8a2;
 }
