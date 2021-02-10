@@ -7,6 +7,7 @@ var current_property = "";
 var arrowCenter = 0;
 var obj_rotate = false;
 var click_child = false;
+var old_obj = "";
 
 $(document).ready(function(e) {
     $('.setting_part').each(function() {
@@ -44,15 +45,16 @@ $(document).ready(function(e) {
                     select_node = $(this);
 
                 click_child = false;
+                obj_click('setting_text', $(this));
                 event.stopPropagation();
             })
             .appendTo('.view > .page' + getCurrentPage())
-            .focus(function() {
-                obj_click(true, 'setting_text', $(this));
-            })
-            .focusout(function() {
-                obj_click(false, 'setting_text', $(this));
-            })
+            // .focus(function() {
+            //     obj_click(true, 'setting_text', $(this));
+            // })
+            // .focusout(function() {
+            //     obj_click(false, 'setting_text', $(this));
+            // })
             .append(
                 jQuery('<div/>', {
                     'class': 'w-100 h-100',
@@ -155,12 +157,12 @@ $(document).ready(function(e) {
                     },
                 })
                 .click(function() {
-                    obj_click(true, 'setting_text', $(this).parent());
+                    obj_click('setting_text', $(this).parent());
                     click_child = true;
                 })
-                .focusout(function() {
-                    obj_click(false, 'setting_text', $(this).parent());
-                })
+                // .focusout(function() {
+                //     obj_click('setting_text', $(this).parent());
+                // })
             )
             .focus();
 
@@ -186,6 +188,7 @@ $(document).ready(function(e) {
     });
 
     $('.view').click(function() {
+        obj_click("","");
         $('.setting_part').each(function() {
             $(this).hide();
         });
@@ -210,7 +213,7 @@ $(document).ready(function(e) {
     //     event.preventDefault();
     // });
 
-    
+
 
     $(".select_input").click(function(e) {
         $(this).parents(".select_div").children(".select_ul").toggle();
@@ -273,18 +276,20 @@ $(document).ready(function(e) {
                         handles: "ne, se, sw, nw",
                     })
                     .click(function() {
-                        $(this).focus();
+                        // $(this).focus();
+                        select_node = $(this);
+                        obj_click('setting_pic', $(this));
                         event.stopPropagation();
                     })
                     .appendTo('.view > .page' + getCurrentPage())
-                    .focus(function() {
-                        select_node = $(this);
-                        obj_click(true, 'setting_pic', $(this));
-                    })
-                    .focusout(function() {
-                        select_node = [];
-                        obj_click(false, 'setting_pic', $(this));
-                    })
+                    // .focus(function() {
+                    //     select_node = $(this);
+                    //     obj_click(true, 'setting_pic', $(this));
+                    // })
+                    // .focusout(function() {
+                    //     select_node = [];
+                    //     obj_click(false, 'setting_pic', $(this));
+                    // })
                     .append(
                         jQuery('<span/>', {
                             'text': "◆",
@@ -368,7 +373,7 @@ $(document).ready(function(e) {
         }
     });
 
-    $('.obj_name').change(function(){
+    $('.obj_name').change(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
             $(select_node[0]).attr("data-name", $(this).text);
         }
@@ -379,17 +384,22 @@ function getCurrentPage() {
     return $("#page_select").val();
 }
 
-function obj_click(focus, id, obj) {
-    if (focus) {
-        $('.setting_part').each(function() {
-            $(this).hide();
-        });
+function obj_click(id, obj) {
+    $('.setting_part').each(function() {
+        $(this).hide();
+    });
 
+    if (old_obj != "") $(old_obj).removeClass("object_focus");
+
+    if (obj != "") {
         $('#' + id).show();
         $(obj).addClass("object_focus");
-        if ($(obj).hasClass("object")) $(".obj_name").text($(obj).attr("data-name"));
-    } else $(obj).removeClass("object_focus");
+        old_obj = obj;
+    } else {
+        old_obj ="";
+    }
 
+    if ($(obj).hasClass("object")) $(".obj_name").text($(obj).attr("data-name"));
 }
 
 function isBorder(obj, event, range) {
