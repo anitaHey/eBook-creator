@@ -48,6 +48,7 @@ $(document).ready(function(e) {
                 obj_click('setting_text', $(this));
                 event.stopPropagation();
             })
+            .click()
             .appendTo('.view > .page' + getCurrentPage())
             // .focus(function() {
             //     obj_click(true, 'setting_text', $(this));
@@ -164,7 +165,6 @@ $(document).ready(function(e) {
                 //     obj_click('setting_text', $(this).parent());
                 // })
             )
-            .focus();
 
     });
 
@@ -281,6 +281,7 @@ $(document).ready(function(e) {
                         obj_click('setting_pic', $(this));
                         event.stopPropagation();
                     })
+                    .click()
                     .appendTo('.view > .page' + getCurrentPage())
                     // .focus(function() {
                     //     select_node = $(this);
@@ -326,7 +327,6 @@ $(document).ready(function(e) {
                             'class': 'w-100 h-100',
                         })
                     )
-                    .focus();
             }
 
             reader.readAsDataURL(this.files[0]);
@@ -373,9 +373,9 @@ $(document).ready(function(e) {
         }
     });
 
-    $('.obj_name').change(function() {
+    $('.obj_name').keyup(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
-            $(select_node[0]).attr("data-name", $(this).text);
+            $(select_node[0]).attr("data-name", $(this).text());
         }
     });
 });
