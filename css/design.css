@@ -171,7 +171,7 @@ body {
     /*width: 80%;*/
 }
 
-.select_input, .obj_name {
+.select_input, .edit_div {
     height: 40px;
     border: 1px #000 solid;
     padding-left: 5px;
@@ -272,4 +272,12 @@ input[type="file"] {
 
 .add_animate:hover {
     background-color: #a7a8a2;
+}
+
+.two_element span {
+    width: 10%;
+}
+
+.two_element div {
+    width: 35%;
 }

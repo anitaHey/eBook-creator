@@ -399,7 +399,13 @@ function obj_click(id, obj) {
         old_obj ="";
     }
 
-    if ($(obj).hasClass("object")) $(".obj_name").text($(obj).attr("data-name"));
+    if ($(obj).hasClass("object")){
+        $(".obj_name").text($(obj).attr("data-name"));
+        $(".obj_height").text($(obj).css("height"));
+        $(".obj_width").text($(obj).css("width"));
+        $(".obj_X").text($(obj).css("left"));
+        $(".obj_Y").text($(obj).css("top"));
+    } 
 }
 
 function isBorder(obj, event, range) {
