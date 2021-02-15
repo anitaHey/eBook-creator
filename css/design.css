@@ -6,13 +6,16 @@ body {
 *::-webkit-scrollbar {
     width: 13px;
     height: 13px;
-    background-color: #F5F5F5;
+    /*background-color: #F5F5F5;*/
 }
 
 *::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    /*    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
-    background-color: #F5F5F5;
+    background-color: #F5F5F5;*/
+
+    -webkit-appearance: none;
+    width: 7px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -52,6 +55,14 @@ body {
     border: 2px solid black;
 
     margin: 15px 10px;
+}
+
+.obj_setting {
+    overflow-y: scroll;
+}
+
+.page {
+    position: relative;
 }
 
 .page_setting {
@@ -171,7 +182,8 @@ body {
     /*width: 80%;*/
 }
 
-.select_input, .edit_div {
+.select_input,
+.edit_div {
     height: 40px;
     border: 1px #000 solid;
     padding-left: 5px;
@@ -235,8 +247,8 @@ body {
 
 .btn_img_sm img {
     padding: 2px;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 }
 
 .btn_img_sm {
@@ -251,7 +263,7 @@ body {
 .img_sm {
     height: 20px;
     width: 20px;
-    padding:1px;
+    padding: 1px;
 }
 
 .btn_img_sm:hover {
@@ -266,7 +278,7 @@ input[type="file"] {
 
 .add_animate {
     height: 40px;
-    border:0;
+    border: 0;
     background-color: #d2d4c9;
 }
 
