@@ -187,6 +187,16 @@ body {
     height: 40px;
     border: 1px #000 solid;
     padding-left: 5px;
+    white-space: nowrap;
+}
+
+[contenteditable="true"].edit_div {
+    white-space: nowrap;
+    overflow: hidden;
+} 
+
+[contenteditable="true"].edit_div br {
+    display:none;
 }
 
 .select_ul {
@@ -276,13 +286,13 @@ input[type="file"] {
     bottom: 100%;
 }
 
-.add_animate {
+.inside_btn{
     height: 40px;
     border: 0;
     background-color: #d2d4c9;
 }
 
-.add_animate:hover {
+.inside_btn:hover {
     background-color: #a7a8a2;
 }
 
@@ -292,4 +302,8 @@ input[type="file"] {
 
 .two_element div {
     width: 35%;
+}
+
+.two_element button {
+    width: 49%;
 }

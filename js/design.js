@@ -439,6 +439,15 @@ $(document).ready(function(e) {
             $(select_node[0]).css("top", $(this).text()+"px");
         }
     });
+
+    $(".add_animate").click(function(){
+        if (select_node.length > 0 && $(select_node[0]).hasClass("object"))
+            obj_click("add_ani_page", $(select_node[0]));
+        else if (select_node.length > 0 && $(select_node[0]).parent().hasClass("object"))
+            obj_click("add_ani_page", $(select_node[0]).parent());
+        else 
+            obj_click("add_ani_page", "");
+    });
 });
 
 function getCurrentPage() {
@@ -458,6 +467,10 @@ function obj_click(id, obj) {
         old_obj = obj;
     } else {
         old_obj = "";
+    }
+
+    if(id =="add_ani_page") {
+        updateAnimateOption(obj);
     }
 
     if ($(obj).hasClass("object")) {
@@ -675,8 +688,8 @@ function imgRotate(type, num) {
         $(select_node[0]).attr("data-scaleX", scaleX);
         $(select_node[0]).attr("data-scaleY", scaleY);
 
-        $(select_node[0]).css("transform", "rotate(" + rotate + "deg)");
-        $(select_node[0]).children("img").css("transform", "scaleX(" + scaleX + ") scaleY(" + scaleY + ")");
+        // $(select_node[0]).css("transform", "rotate(" + rotate + "deg)");
+        $(select_node[0]).children("img").css("transform", "scaleX(" + scaleX + ") scaleY(" + scaleY + ") rotate(" + rotate + "deg)");
     }
 }
 
@@ -756,4 +769,17 @@ function updatePosition(obj) {
 
 function removeUnit(str) {
     if (str.endsWith("px")) return str.slice(0, -2);
+}
+
+function getObjectType(obj) {
+    if($(obj).hasClass("object")) {
+        if($(obj).hasClass("text")) return getTypeLang("chi", "text");
+        else if($(obj).hasClass("pic")) return getTypeLang("chi", "pic");
+    }
+
+    return "";
+}
+
+function updateAnimateOption(obj) {
+    $(".obj_type").text(getObjectType(obj));
 }
