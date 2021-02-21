@@ -1,5 +1,6 @@
 var input_state = 1;
 var select_node = new Array();
+var select_word = new Array();
 var save_select_node = new Array();
 var new_select = true;
 var select_range;
@@ -58,10 +59,8 @@ $(document).ready(function(e) {
                 }
             })
             .click(function() {
-                if (!click_child)
-                    select_node = $(this);
+                select_node = $(this);
 
-                click_child = false;
                 obj_click('setting_text', $(this));
                 event.stopPropagation();
             })
@@ -88,9 +87,9 @@ $(document).ready(function(e) {
                             if (sel.toString().length > 0) {
                                 select_range = sel.getRangeAt(0);
                                 new_select = true;
-                                select_node = select_range.cloneContents().childNodes;
+                                select_word = select_range.cloneContents().childNodes;
                             } else {
-                                select_node = [];
+                                select_word = [];
                                 setCurrentSelect();
                             }
                         });
@@ -176,7 +175,6 @@ $(document).ready(function(e) {
                 })
                 .click(function() {
                     obj_click('setting_text', $(this).parent());
-                    click_child = true;
                 })
                 // .focusout(function() {
                 //     obj_click('setting_text', $(this).parent());
@@ -493,8 +491,8 @@ function isBorder(obj, event, range) {
 }
 
 function changeTextFont(font, change) {
-    if (select_node.length > 0) {
-        var length = select_node.length;
+    if (select_word.length > 0) {
+        var length = select_word.length;
         if (change) save_select_node = [];
         var node = document.createElement('span');
         $(node).addClass("new_span");
@@ -503,12 +501,12 @@ function changeTextFont(font, change) {
 
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
-                save_select_node.push(removeQuotes($(select_node[i]).css("font-family")));
+                save_select_node.push(removeQuotes($(select_word[i]).css("font-family")));
                 current_property = "font-family";
             }
 
-            $(select_node[i]).css("font-family", font);
-            node.appendChild($(select_node[i]).clone()[0]);
+            $(select_word[i]).css("font-family", font);
+            node.appendChild($(select_word[i]).clone()[0]);
         }
 
         select_range.deleteContents();
@@ -522,20 +520,20 @@ function changeTextFont(font, change) {
 }
 
 function changeTextColor(color, change) {
-    if (select_node.length > 0) {
-        var length = select_node.length;
+    if (select_word.length > 0) {
+        var length = select_word.length;
         if (change) save_select_node = [];
         var node = document.createElement('span');
         $(node).addClass("new_span");
 
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
-                save_select_node.push($(select_node[i]).css("color"));
+                save_select_node.push($(select_word[i]).css("color"));
                 current_property = "color";
             }
 
-            $(select_node[i]).css("color", color);
-            node.appendChild($(select_node[i]).clone()[0]);
+            $(select_word[i]).css("color", color);
+            node.appendChild($(select_word[i]).clone()[0]);
         }
 
         select_range.deleteContents();
@@ -549,20 +547,20 @@ function changeTextColor(color, change) {
 }
 
 function changeTextSize(size, change) {
-    if (select_node.length > 0) {
-        var length = select_node.length;
+    if (select_word.length > 0) {
+        var length = select_word.length;
         if (change) save_select_node = [];
         var node = document.createElement('span');
         $(node).addClass("new_span");
 
         for (var i = 0; i < length; i++) {
             if (!change && new_select && save_select_node.length < length) {
-                save_select_node.push($(select_node[i]).css("font-size"));
+                save_select_node.push($(select_word[i]).css("font-size"));
                 current_property = "font-size";
             }
 
-            $(select_node[i]).css("font-size", parseInt(size));
-            node.appendChild($(select_node[i]).clone()[0]);
+            $(select_word[i]).css("font-size", parseInt(size));
+            node.appendChild($(select_word[i]).clone()[0]);
         }
 
         select_range.deleteContents();
@@ -656,20 +654,20 @@ function removeQuotes(str) {
 }
 
 function setTextInit() {
-    if (select_node.length > 0 && current_property != "") {
-        var length = select_node.length;
+    if (select_word.length > 0 && current_property != "") {
+        var length = select_word.length;
         var node = document.createElement('span');
         $(node).addClass("new_span");
 
         for (var i = 0; i < length; i++) {
-            $(select_node[i]).css(current_property, save_select_node[i]);
-            node.appendChild($(select_node[i]).clone()[0]);
+            $(select_word[i]).css(current_property, save_select_node[i]);
+            node.appendChild($(select_word[i]).clone()[0]);
         }
 
         select_range.deleteContents();
         select_range.insertNode(node);
 
-        select_node = [];
+        select_word = [];
         save_select_node = [];
     }
 }
