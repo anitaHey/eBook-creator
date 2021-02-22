@@ -193,10 +193,10 @@ body {
 [contenteditable="true"].edit_div {
     white-space: nowrap;
     overflow: hidden;
-} 
+}
 
 [contenteditable="true"].edit_div br {
-    display:none;
+    display: none;
 }
 
 .select_ul {
@@ -286,7 +286,7 @@ input[type="file"] {
     bottom: 100%;
 }
 
-.inside_btn{
+.inside_btn {
     height: 40px;
     border: 0;
     background-color: #d2d4c9;
@@ -306,4 +306,10 @@ input[type="file"] {
 
 .two_element button {
     width: 49%;
+}
+
+@media (max-width: 1500px) {
+    .two_element button {
+        width: 100%;
+    }
 }

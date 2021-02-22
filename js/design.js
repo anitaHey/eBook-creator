@@ -10,6 +10,9 @@ var obj_rotate = false;
 var click_child = false;
 var resize_click = false;
 var old_obj = "";
+var client_language = "chi";
+var text_animate_option = ["位置移動", "樣式改變"];
+var pic_animate_option = ["位置移動", "樣式改變", "旋轉", "換圖動畫"];
 
 $(document).ready(function(e) {
     $('.setting_part').each(function() {
@@ -235,7 +238,7 @@ $(document).ready(function(e) {
 
 
     $(".select_input").click(function(e) {
-        $(this).parents(".select_div").children(".select_ul").toggle();
+        $(this).parents(".select_div").children(".select_ul.active").toggle();
     });
 
     $(".select_ul > li").click(function(e) {
@@ -416,34 +419,34 @@ $(document).ready(function(e) {
 
     $('.obj_height').keyup(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
-            $(select_node[0]).css("height", $(this).text()+"px");
+            $(select_node[0]).css("height", $(this).text() + "px");
         }
     });
 
     $('.obj_width').keyup(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
-            $(select_node[0]).css("width", $(this).text()+"px");
+            $(select_node[0]).css("width", $(this).text() + "px");
         }
     });
 
     $('.obj_X').keyup(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
-            $(select_node[0]).css("left", $(this).text()+"px");
+            $(select_node[0]).css("left", $(this).text() + "px");
         }
     });
 
     $('.obj_Y').keyup(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object")) {
-            $(select_node[0]).css("top", $(this).text()+"px");
+            $(select_node[0]).css("top", $(this).text() + "px");
         }
     });
 
-    $(".add_animate").click(function(){
+    $(".add_animate").click(function() {
         if (select_node.length > 0 && $(select_node[0]).hasClass("object"))
             obj_click("add_ani_page", $(select_node[0]));
         else if (select_node.length > 0 && $(select_node[0]).parent().hasClass("object"))
             obj_click("add_ani_page", $(select_node[0]).parent());
-        else 
+        else
             obj_click("add_ani_page", "");
     });
 });
@@ -467,7 +470,7 @@ function obj_click(id, obj) {
         old_obj = "";
     }
 
-    if(id =="add_ani_page") {
+    if (id == "add_ani_page") {
         updateAnimateOption(obj);
     }
 
@@ -743,7 +746,7 @@ function getObjName(type) {
         if ($(childNodes[a]).hasClass(type)) count++;
     }
 
-    return getTypeLang("chi", type) + count;
+    return getTypeLang(client_language, type) + count;
 }
 
 function getTypeLang(lang, type) {
@@ -770,14 +773,30 @@ function removeUnit(str) {
 }
 
 function getObjectType(obj) {
-    if($(obj).hasClass("object")) {
-        if($(obj).hasClass("text")) return getTypeLang("chi", "text");
-        else if($(obj).hasClass("pic")) return getTypeLang("chi", "pic");
+    if ($(obj).hasClass("object")) {
+        if ($(obj).hasClass("text")) return getTypeLang(client_language, "text");
+        else if ($(obj).hasClass("pic")) return getTypeLang(client_language, "pic");
     }
 
     return "";
 }
 
 function updateAnimateOption(obj) {
-    $(".obj_type").text(getObjectType(obj));
+    var type = getObjectType(obj);
+    $(".obj_type").text(type);
+    $('.ani_type > .select_ul').each(function() {
+        $(this).removeClass("active");
+    });
+
+    if (type == getTypeLang(client_language, "text")) {
+        $(".ani_type > .text_ani").addClass("active");
+        $('.ani_type > .select_input').text($(".ani_type > .text_ani > li[value=0]").text());
+    } else if (type == getTypeLang(client_language, "pic")){
+        $(".ani_type > .pic_ani").addClass("active");
+        $('.ani_type > .select_input').text($(".ani_type > .pic_ani > li[value=0]").text());
+    }
+}
+
+function changeAnimateSelect() {
+
 }

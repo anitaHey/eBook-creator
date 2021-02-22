@@ -57,11 +57,21 @@
                 <div class="mb-4">動畫種類</div>
                 <div class="select_div ani_type mb-5">
                     <div class="select_input"></div>
-                    <ul class="select_ul z-index">
+                    <ul class="select_ul z-index text_ani active">
+                        <li value="0">位置移動</li>
+                        <li value="1">樣式改變</li>
+                    </ul>
+                    <ul class="select_ul z-index pic_ani">
+                        <li value="0">位置移動</li>
+                        <li value="1">樣式改變</li>
+                        <li value="2">旋轉</li>
+                        <li value="3">換圖動畫</li>
                     </ul>
                 </div>
                 <div class="ani_detail">
-                    
+                    <div class="text_ani">
+                        
+                    </div>
                 </div>
                 <button class="mb-3 w-100 add_animate inside_btn"><img src="../assets/image/magnifying-glass.png" alt="" class="mr-2 img_sm">動畫瀏覽</button>
                 <div class="inline_line mb-3 two_element">
@@ -85,7 +95,7 @@
                 <div class="mb-3">字型</div>
                 <div class="select_div select_font mb-5">
                     <div class="select_input">Noto Sans TC</div>
-                    <ul class="select_ul z-index">
+                    <ul class="select_ul z-index active">
                         <li value="Noto Sans TC">Noto Sans TC</li>
                         <li value="Arial">Arial</li>
                         <li value="Sans Serif" selected>Sans Serif</li>
@@ -113,7 +123,7 @@
                         <div class="select_input">20</div>
                         <button id="font_size_p" class="setting_btn_sm">+</button>
                     </div>
-                    <ul class="select_ul z-index">
+                    <ul class="select_ul z-index active">
                         <li value="12">12</li>
                         <li value="16">16</li>
                         <li value="20">20</li>
