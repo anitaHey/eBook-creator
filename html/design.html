@@ -34,7 +34,7 @@
                 <div class="col-6">
                     <button class="page_insert_btn" id="insert_text"><img src="../assets/image/text.png" alt=""></button>
                     <label for="pic_upload" class="page_insert_btn" id="insert_pic"><img src="../assets/image/picture.png" alt=""></label>
-                    <input id="pic_upload" type="file" accept="image/png, image/jpeg"/>
+                    <input id="pic_upload" type="file" accept="image/png, image/jpeg" />
                 </div>
             </div>
         </div>
@@ -52,9 +52,9 @@
                 <div class="mb-4 h3">新增動畫</div>
                 <div class="mb-3">物件名稱</div>
                 <div class="obj_name mb-5 edit_div" contenteditable="true"></div>
-                <div class="mb-4">物件種類</div>
+                <div class="mb-3">物件種類</div>
                 <div class="obj_type mb-5 edit_div"></div>
-                <div class="mb-4">動畫種類</div>
+                <div class="mb-3">動畫種類</div>
                 <div class="select_div ani_type mb-5">
                     <div class="select_input"></div>
                     <ul class="select_ul z-index text_ani active">
@@ -68,9 +68,34 @@
                         <li value="3">換圖動畫</li>
                     </ul>
                 </div>
-                <div class="ani_detail">
+                <div class="mb-3">動畫設定</div>
+                <div class="ani_detail mb-5">
                     <div class="text_ani">
-                        
+                        <div data-value="0">
+                            <div class="mb-3">起始座標</div>
+                            <div class="inline_line two_element mb-3">
+                                <span>X</span>
+                                <div class="obj_start_X edit_div" contenteditable="true"></div>
+                                <span>Y</span>
+                                <div class="obj_start_Y edit_div" contenteditable="true"></div>
+                            </div>
+                            <div class="mb-3">結束座標</div>
+                            <div class="inline_line two_element mb-3">
+                                <span>X</span>
+                                <div class="obj_end_X edit_div" contenteditable="true"></div>
+                                <span>Y</span>
+                                <div class="obj_end_Y edit_div" contenteditable="true"></div>
+                            </div>
+                            <div class="mb-3">移動方式</div>
+                            <div class="select_div text_move mb-5">
+                                <div class="select_input"></div>
+                                <ul class="select_ul z-index active">
+                                    <li value="0">線性移動</li>
+                                    <li value="1">自由移動</li>
+                                </ul>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
                 <button class="mb-3 w-100 add_animate inside_btn"><img src="../assets/image/magnifying-glass.png" alt="" class="mr-2 img_sm">動畫瀏覽</button>
@@ -84,12 +109,16 @@
                 <div class="obj_name mb-5 edit_div" contenteditable="true"></div>
                 <div class="mb-5">
                     <div class="inline_line mb-3 two_element">
-                        <span>長</span> <div class="obj_height edit_div" contenteditable="true"></div>
-                        <span>寬</span> <div class="obj_width edit_div" contenteditable="true"></div>
+                        <span>長</span>
+                        <div class="obj_height edit_div" contenteditable="true"></div>
+                        <span>寬</span>
+                        <div class="obj_width edit_div" contenteditable="true"></div>
                     </div>
                     <div class="inline_line two_element">
-                        <span>X</span><div class="obj_X edit_div" contenteditable="true"></div>
-                        <span>Y</span><div class="obj_Y edit_div" contenteditable="true"></div>
+                        <span>X</span>
+                        <div class="obj_X edit_div" contenteditable="true"></div>
+                        <span>Y</span>
+                        <div class="obj_Y edit_div" contenteditable="true"></div>
                     </div>
                 </div>
                 <div class="mb-3">字型</div>
@@ -150,12 +179,16 @@
                 <div class="obj_name edit_div mb-5" contenteditable="true"></div>
                 <div class="mb-5">
                     <div class="inline_line mb-3 two_element">
-                        <span>長</span> <div class="obj_height edit_div" contenteditable="true"></div>
-                        <span>寬</span> <div class="obj_width edit_div" contenteditable="true"></div>
+                        <span>長</span>
+                        <div class="obj_height edit_div" contenteditable="true"></div>
+                        <span>寬</span>
+                        <div class="obj_width edit_div" contenteditable="true"></div>
                     </div>
                     <div class="inline_line two_element">
-                        <span>X</span><div class="obj_X edit_div" contenteditable="true"></div>
-                        <span>Y</span><div class="obj_Y edit_div" contenteditable="true"></div>
+                        <span>X</span>
+                        <div class="obj_X edit_div" contenteditable="true"></div>
+                        <span>Y</span>
+                        <div class="obj_Y edit_div" contenteditable="true"></div>
                     </div>
                 </div>
                 <div class="mb-3">圖片旋轉</div>

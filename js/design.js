@@ -791,6 +791,7 @@ function updateAnimateOption(obj) {
     if (type == getTypeLang(client_language, "text")) {
         $(".ani_type > .text_ani").addClass("active");
         $('.ani_type > .select_input').text($(".ani_type > .text_ani > li[value=0]").text());
+        $('.text_move > .select_input').text($(".text_move > .select_ul > li[value=0]").text());
     } else if (type == getTypeLang(client_language, "pic")){
         $(".ani_type > .pic_ani").addClass("active");
         $('.ani_type > .select_input').text($(".ani_type > .pic_ani > li[value=0]").text());
